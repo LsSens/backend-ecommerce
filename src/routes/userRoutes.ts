@@ -175,8 +175,6 @@ const userController = new UserController();
 
 router.post('/register', validateDto(CreateUserDto), userController.register.bind(userController));
 router.post('/login', validateDto(LoginDto), userController.login.bind(userController));
-
-// Rotas que requerem autenticação e permissões específicas
 router.get('/', authenticateToken, requirePermissions.Operator, userController.getAllUsers.bind(userController));
 router.get('/:id', authenticateToken, requirePermissions.Operator, userController.getUserById.bind(userController));
 router.put('/:id', authenticateToken, requirePermissions.Operator, validateDto(UpdateUserDto), userController.updateUser.bind(userController));

@@ -27,7 +27,9 @@ const hasPermission = (userRole: Permission, requiredRole: Permission): boolean 
 export const requireRole = (requiredRole: Permission) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     try {
-      if (!(req as any).user) {
+      const user = (req as any).user;
+
+      if (!user) {
         res.status(401).json({
           success: false,
           message: 'Usuário não autenticado'
@@ -35,15 +37,12 @@ export const requireRole = (requiredRole: Permission) => {
         return;
       }
 
-      const user = (req as any).user;
-
       if (!hasPermission(user.role, requiredRole)) {
         res.status(403).json({
           success: false,
           message: 'Acesso negado. Permissões insuficientes.',
           requiredRole,
-          userRole: user.role,
-          hierarchy: PERMISSION_HIERARCHY
+          userRole: user.role
         });
         return;
       }
