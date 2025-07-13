@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { UserController } from '../controllers/UserController';
 import { authenticateToken } from '../middleware/auth';
 import { validateDto } from '../middleware/validation';
+import { requirePermissions } from '../middleware/permissions';
 import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/UserDto';
 
 /**
@@ -174,9 +175,11 @@ const userController = new UserController();
 
 router.post('/register', validateDto(CreateUserDto), userController.register.bind(userController));
 router.post('/login', validateDto(LoginDto), userController.login.bind(userController));
-router.get('/', authenticateToken, userController.getAllUsers.bind(userController));
-router.get('/:id', authenticateToken, userController.getUserById.bind(userController));
-router.put('/:id', authenticateToken, validateDto(UpdateUserDto), userController.updateUser.bind(userController));
-router.delete('/:id', authenticateToken, userController.deleteUser.bind(userController));
+
+// Rotas que requerem autenticação e permissões específicas
+router.get('/', authenticateToken, requirePermissions.Operator, userController.getAllUsers.bind(userController));
+router.get('/:id', authenticateToken, requirePermissions.Operator, userController.getUserById.bind(userController));
+router.put('/:id', authenticateToken, requirePermissions.Operator, validateDto(UpdateUserDto), userController.updateUser.bind(userController));
+router.delete('/:id', authenticateToken, requirePermissions.Admin, userController.deleteUser.bind(userController));
 
 export default router; 
