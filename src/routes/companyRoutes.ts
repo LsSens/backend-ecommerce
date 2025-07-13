@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { CompanyController } from '../controllers/CompanyController';
 import { authenticateToken } from '../middleware/auth';
 import { validateDto } from '../middleware/validation';
+import { validateUniqueDomains } from '../middleware/corsMiddleware';
 import { CreateCompanyDto, UpdateCompanyDto } from '../dto/CompanyDto';
 
 /**
@@ -36,6 +37,10 @@ import { CreateCompanyDto, UpdateCompanyDto } from '../dto/CompanyDto';
  *                 type: string
  *               address:
  *                 type: string
+ *               domains:
+ *                 type: array
+ *                 items:
+ *                   type: string
  *               userId:
  *                 type: string
  *     responses:
@@ -147,13 +152,12 @@ import { CreateCompanyDto, UpdateCompanyDto } from '../dto/CompanyDto';
 const router = Router();
 const companyController = new CompanyController();
 
-// Todas as rotas de empresa requerem autenticação
 router.use(authenticateToken);
 
-router.post('/', validateDto(CreateCompanyDto), companyController.createCompany.bind(companyController));
+router.post('/', validateDto(CreateCompanyDto), validateUniqueDomains, companyController.createCompany.bind(companyController));
 router.get('/', companyController.getAllCompanies.bind(companyController));
 router.get('/:id', companyController.getCompanyById.bind(companyController));
-router.put('/:id', validateDto(UpdateCompanyDto), companyController.updateCompany.bind(companyController));
+router.put('/:id', validateDto(UpdateCompanyDto), validateUniqueDomains, companyController.updateCompany.bind(companyController));
 router.delete('/:id', companyController.deleteCompany.bind(companyController));
 router.get('/user/:userId', companyController.getCompaniesByUser.bind(companyController));
 

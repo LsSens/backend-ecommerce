@@ -1,25 +1,48 @@
 import mongoose from 'mongoose';
 import { logger } from '../utils/logger';
+import { Company } from '../models/Company';
 
 export const connectDatabase = async (): Promise<void> => {
   try {
-    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce_white_label';
+    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce';
     
     await mongoose.connect(mongoUri);
     
-    logger.info('✅ Conectado ao MongoDB com sucesso');
+    logger.info('✅ Conectado ao MongoDB');
     
-    mongoose.connection.on('error', (error) => {
-      logger.error('❌ Erro na conexão com MongoDB:', error);
-    });
-    
-    mongoose.connection.on('disconnected', () => {
-      logger.warn('⚠️ Desconectado do MongoDB');
-    });
+    await createUniqueIndexes();
     
   } catch (error) {
-    logger.error('❌ Erro ao conectar com MongoDB:', error);
-    process.exit(1);
+    logger.error('❌ Erro ao conectar ao MongoDB:', error);
+    throw error;
+  }
+};
+
+const createUniqueIndexes = async (): Promise<void> => {
+  try {
+    const existingIndexes = await Company.collection.listIndexes().toArray();
+    const domainsIndexExists = existingIndexes.some(index => 
+      index.name === 'domains_unique_index' || 
+      (index.key && index.key.domains === 1)
+    );
+
+    if (!domainsIndexExists) {
+      await Company.collection.createIndex(
+        { domains: 1 }, 
+        { 
+          unique: true,
+          sparse: true,
+          background: true,
+          name: 'domains_unique_index'
+        }
+      );
+      
+      logger.info('✅ Índices únicos criados com sucesso');
+    } else {
+      logger.info('✅ Índices únicos já existem');
+    }
+  } catch (error) {
+    logger.error('❌ Erro ao criar índices únicos:', error);
   }
 };
 

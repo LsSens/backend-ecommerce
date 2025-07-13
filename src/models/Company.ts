@@ -5,6 +5,7 @@ export interface ICompany extends Document {
   cnpj: string;
   address: string;
   userId?: mongoose.Types.ObjectId;
+  domains: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,6 +34,19 @@ const companySchema = new Schema<ICompany>({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: false
+  },
+  domains: {
+    type: [String],
+    required: [true, 'Domínios são obrigatórios'],
+    trim: true,
+    minlength: [1, 'Pelo menos um domínio é obrigatório'],
+    validate: {
+      validator: function(domains: string[]) {
+        const uniqueDomains = [...new Set(domains)];
+        return uniqueDomains.length === domains.length;
+      },
+      message: 'Domínios duplicados não são permitidos'
+    }
   }
 }, {
   timestamps: true

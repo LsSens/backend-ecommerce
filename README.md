@@ -104,6 +104,7 @@ src/
 - `name` - Nome da empresa
 - `cnpj` - CNPJ (único)
 - `address` - Endereço
+- `domains` - Dominios registrados
 - `userId` - ID do usuário proprietário (opcional)
 
 ### Product (Produto)

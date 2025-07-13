@@ -1,4 +1,4 @@
-import { IsString, IsOptional, MinLength, MaxLength, Matches } from 'class-validator';
+import { IsString, IsOptional, MinLength, MaxLength, Matches, IsArray } from 'class-validator';
 
 export class CreateCompanyDto {
   @IsString({ message: 'Nome da empresa deve ser uma string' })
@@ -14,6 +14,10 @@ export class CreateCompanyDto {
 
   @IsString({ message: 'Endereço deve ser uma string' })
   address!: string;
+
+  @IsArray({ message: 'Domínios devem ser um array' })
+  @IsString({ each: true, message: 'Cada domínio deve ser uma string' })
+  domains!: string[];
 
   @IsOptional()
   userId?: string;
@@ -36,6 +40,11 @@ export class UpdateCompanyDto {
   @IsOptional()
   @IsString({ message: 'Endereço deve ser uma string' })
   address?: string;
+
+  @IsOptional()
+  @IsArray({ message: 'Domínios devem ser um array' })
+  @IsString({ each: true, message: 'Cada domínio deve ser uma string' })
+  domains?: string[];
 
   @IsOptional()
   userId?: string;
