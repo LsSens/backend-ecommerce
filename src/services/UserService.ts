@@ -61,7 +61,7 @@ export class UserService {
 
   async login(loginData: LoginDto): Promise<{ user: IUser; token: string }> {
     try {
-      const user = await User.findOne({ email: loginData.email });
+      const user = await User.findOne({ email: loginData.email, companyId: loginData.companyId });
       if (!user) {
         throw new Error('Email ou senha inválidos');
       }
@@ -80,7 +80,8 @@ export class UserService {
         { 
           id: user._id, 
           email: user.email, 
-          name: user.name 
+          name: user.name,
+          companyId: user.companyId
         },
         jwtSecret,
         { 

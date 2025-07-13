@@ -121,20 +121,4 @@ export class CompanyController {
     }
   }
 
-  async getCompaniesByUser(req: Request, res: Response): Promise<void> {
-    try {
-      const { userId } = req.params;
-      const companies = await this.companyService.getCompaniesByUserId(userId);
-
-      res.status(200).json({
-        success: true,
-        data: companies
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error instanceof Error ? error.message : 'Erro ao buscar empresas do usuário'
-      });
-    }
-  }
 } 

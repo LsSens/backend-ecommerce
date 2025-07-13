@@ -4,7 +4,6 @@ export interface ICompany extends Document {
   name: string;
   cnpj: string;
   address: string;
-  userId?: mongoose.Types.ObjectId;
   domains: string[];
   createdAt: Date;
   updatedAt: Date;
@@ -29,11 +28,6 @@ const companySchema = new Schema<ICompany>({
     type: String,
     required: [true, 'Endereço é obrigatório'],
     trim: true
-  },
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: false
   },
   domains: {
     type: [String],

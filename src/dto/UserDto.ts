@@ -24,6 +24,9 @@ export class CreateUserDto {
   @IsOptional()
   @IsIn(['Admin', 'Customer', 'Operator'], { message: 'Role deve ser Admin, Customer ou Operator' })
   role?: 'Admin' | 'Customer' | 'Operator';
+
+  @IsOptional()
+  companyId?: string;
 }
 
 export class UpdateUserDto {
@@ -53,6 +56,9 @@ export class UpdateUserDto {
   @IsOptional()
   @IsIn(['Admin', 'Customer', 'Operator'], { message: 'Role deve ser Admin, Customer ou Operator' })
   role?: 'Admin' | 'Customer' | 'Operator';
+
+  @IsOptional()
+  companyId?: string;
 }
 
 export class LoginDto {
@@ -61,4 +67,6 @@ export class LoginDto {
 
   @IsString({ message: 'Senha deve ser uma string' })
   password!: string;
+
+  companyId!: string;
 } 

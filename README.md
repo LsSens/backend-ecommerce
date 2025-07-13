@@ -98,6 +98,7 @@ src/
 - `phone` - Telefone (opcional)
 - `address` - Endereço (opcional)
 - `role` - Permissão (opcional)
+- `companyId` - ID da empresa (opcional)
 
 ### Company (Empresa)
 - `id` - Identificador único
@@ -105,7 +106,6 @@ src/
 - `cnpj` - CNPJ (único)
 - `address` - Endereço
 - `domains` - Dominios registrados
-- `userId` - ID do usuário proprietário (opcional)
 
 ### Product (Produto)
 - `id` - Identificador único

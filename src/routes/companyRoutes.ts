@@ -41,8 +41,6 @@ import { CreateCompanyDto, UpdateCompanyDto } from '../dto/CompanyDto';
  *                 type: array
  *                 items:
  *                   type: string
- *               userId:
- *                 type: string
  *     responses:
  *       201:
  *         description: Empresa criada com sucesso
@@ -103,8 +101,6 @@ import { CreateCompanyDto, UpdateCompanyDto } from '../dto/CompanyDto';
  *                 type: string
  *               address:
  *                 type: string
- *               userId:
- *                 type: string
  *     responses:
  *       200:
  *         description: Empresa atualizada
@@ -128,26 +124,7 @@ import { CreateCompanyDto, UpdateCompanyDto } from '../dto/CompanyDto';
  *         description: Empresa não encontrada
  */
 
-/**
- * @swagger
- * /api/companies/user/{userId}:
- *   get:
- *     summary: Lista empresas por usuário
- *     tags: [Companies]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: userId
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Lista de empresas do usuário
- *       404:
- *         description: Nenhuma empresa encontrada para o usuário
- */
+
 
 const router = Router();
 const companyController = new CompanyController();
@@ -159,6 +136,5 @@ router.get('/', companyController.getAllCompanies.bind(companyController));
 router.get('/:id', companyController.getCompanyById.bind(companyController));
 router.put('/:id', validateDto(UpdateCompanyDto), validateUniqueDomains, companyController.updateCompany.bind(companyController));
 router.delete('/:id', companyController.deleteCompany.bind(companyController));
-router.get('/user/:userId', companyController.getCompaniesByUser.bind(companyController));
 
 export default router; 

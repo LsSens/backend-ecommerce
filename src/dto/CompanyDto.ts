@@ -18,9 +18,6 @@ export class CreateCompanyDto {
   @IsArray({ message: 'Domínios devem ser um array' })
   @IsString({ each: true, message: 'Cada domínio deve ser uma string' })
   domains!: string[];
-
-  @IsOptional()
-  userId?: string;
 }
 
 export class UpdateCompanyDto {
@@ -45,7 +42,4 @@ export class UpdateCompanyDto {
   @IsArray({ message: 'Domínios devem ser um array' })
   @IsString({ each: true, message: 'Cada domínio deve ser uma string' })
   domains?: string[];
-
-  @IsOptional()
-  userId?: string;
 } 

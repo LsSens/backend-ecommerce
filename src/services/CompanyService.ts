@@ -4,7 +4,6 @@ import { CreateCompanyDto, UpdateCompanyDto } from '../dto/CompanyDto';
 export class CompanyService {
   async createCompany(companyData: CreateCompanyDto): Promise<ICompany> {
     try {
-      // Verificar se o CNPJ já existe
       const existingCompany = await Company.findOne({ cnpj: companyData.cnpj });
       if (existingCompany) {
         throw new Error('CNPJ já está em uso');

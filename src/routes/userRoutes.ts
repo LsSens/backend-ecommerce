@@ -38,6 +38,8 @@ import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/UserDto';
  *                 type: string
  *               address:
  *                 type: string
+ *               companyId:
+ *                 type: string
  *               role:
  *                 type: string
  *                 enum: [Admin, Customer, Operator]
@@ -67,6 +69,8 @@ import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/UserDto';
  *               email:
  *                 type: string
  *               password:
+ *                 type: string
+ *               companyId:
  *                 type: string
  *     responses:
  *       200:
@@ -137,6 +141,8 @@ import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/UserDto';
  *                 type: string
  *               address:
  *                 type: string
+ *               companyId:
+ *                 type: string
  *               role:
  *                 type: string
  *                 enum: [Admin, Customer, Operator]
@@ -166,11 +172,8 @@ import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/UserDto';
 const router = Router();
 const userController = new UserController();
 
-// Rotas públicas
 router.post('/register', validateDto(CreateUserDto), userController.register.bind(userController));
 router.post('/login', validateDto(LoginDto), userController.login.bind(userController));
-
-// Rotas protegidas
 router.get('/', authenticateToken, userController.getAllUsers.bind(userController));
 router.get('/:id', authenticateToken, userController.getUserById.bind(userController));
 router.put('/:id', authenticateToken, validateDto(UpdateUserDto), userController.updateUser.bind(userController));

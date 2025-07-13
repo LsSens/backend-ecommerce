@@ -27,9 +27,10 @@ export class UserController {
     }
   }
 
-  async login(req: Request, res: Response): Promise<void> {
+  async login(req: Request & { companyId?: string }, res: Response): Promise<void> {
     try {
-      const loginData: LoginDto = req.body;
+      const companyId = req.companyId;
+      const loginData: LoginDto = { ...req.body, companyId };
       const { user, token } = await this.userService.login(loginData);
 
       res.status(200).json({

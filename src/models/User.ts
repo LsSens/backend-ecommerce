@@ -7,6 +7,7 @@ export interface IUser extends Document {
   password: string;
   phone?: string;
   address?: string;
+  companyId?: string;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -47,10 +48,14 @@ const userSchema = new Schema<IUser>({
     enum: ['Admin', 'Customer', 'Operator'],
     default: 'Customer',
     required: true
+  },
+  companyId: {
+    type: String,
+    required: false,
+    ref: 'Company'
   }
 }, {
   timestamps: true,
-  versionKey: false,
   toJSON: {
     transform: function(doc: any, ret: any) {
       delete ret.password;
