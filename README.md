@@ -97,6 +97,7 @@ src/
 - `password` - Senha (criptografada)
 - `phone` - Telefone (opcional)
 - `address` - Endereço (opcional)
+- `role` - Permissão (opcional)
 
 ### Company (Empresa)
 - `id` - Identificador único
