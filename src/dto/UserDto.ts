@@ -14,6 +14,10 @@ export class CreateUserDto {
   password!: string;
 
   @IsOptional()
+  @IsString({ message: 'CPF deve ser uma string' })
+  cpf?: string;
+
+  @IsOptional()
   @IsString({ message: 'Telefone deve ser uma string' })
   phone?: string;
 
@@ -44,6 +48,10 @@ export class UpdateUserDto {
   @IsString({ message: 'Senha deve ser uma string' })
   @MinLength(6, { message: 'Senha deve ter pelo menos 6 caracteres' })
   password?: string;
+
+  @IsOptional()
+  @IsString({ message: 'CPF deve ser uma string' })
+  cpf?: string;
 
   @IsOptional()
   @IsString({ message: 'Telefone deve ser uma string' })

@@ -5,6 +5,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  cpf?: string;
   phone?: string;
   address?: string;
   companyId?: string;
@@ -25,7 +26,6 @@ const userSchema = new Schema<IUser>({
   email: {
     type: String,
     required: [true, 'Email é obrigatório'],
-    unique: true,
     lowercase: true,
     trim: true,
     match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Email inválido']
@@ -34,6 +34,10 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: [true, 'Senha é obrigatória'],
     minlength: [6, 'Senha deve ter pelo menos 6 caracteres']
+  },
+  cpf: {
+    type: String,
+    trim: true
   },
   phone: {
     type: String,
@@ -81,5 +85,9 @@ userSchema.pre('save', async function(next: any) {
 userSchema.methods.comparePassword = async function(candidatePassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };
+
+// Índices compostos para otimizar consultas por email/CPF + companyId
+userSchema.index({ email: 1, companyId: 1 });
+userSchema.index({ cpf: 1, companyId: 1 });
 
 export const User = mongoose.model<IUser>('User', userSchema); 

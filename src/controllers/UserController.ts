@@ -12,7 +12,19 @@ export class UserController {
   async register(req: Request, res: Response): Promise<void> {
     try {
       const userData: CreateUserDto = req.body;
-      const user = await this.userService.createUser(userData);
+      const companyId = (req as any).user?.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+
+      // Adicionar o companyId aos dados do usuário
+      const userDataWithCompany = { ...userData, companyId };
+      const user = await this.userService.createUser(userDataWithCompany);
 
       res.status(201).json({
         success: true,

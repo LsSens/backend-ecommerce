@@ -5,10 +5,28 @@ import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/UserDto';
 export class UserService {
   async createUser(userData: CreateUserDto): Promise<IUser> {
     try {
-      // Verificar se o email já existe
-      const existingUser = await User.findOne({ email: userData.email });
-      if (existingUser) {
-        throw new Error('Email já está em uso');
+      const { email, cpf, companyId } = userData;
+      
+      // Verificar se o email já existe na mesma empresa
+      if (email) {
+        const existingUserByEmail = await User.findOne({ 
+          email: email,
+          companyId: companyId 
+        });
+        if (existingUserByEmail) {
+          throw new Error('Email já está em uso nesta empresa');
+        }
+      }
+
+      // Verificar se o CPF já existe na mesma empresa (se CPF foi fornecido)
+      if (cpf) {
+        const existingUserByCpf = await User.findOne({ 
+          cpf: cpf,
+          companyId: companyId 
+        });
+        if (existingUserByCpf) {
+          throw new Error('CPF já está em uso nesta empresa');
+        }
       }
 
       const user = new User(userData);
@@ -22,6 +40,32 @@ export class UserService {
 
   async updateUser(id: string, userData: UpdateUserDto, companyId: string): Promise<IUser | null> {
     try {
+      const { email, cpf } = userData;
+      
+      // Verificar se o email já existe na mesma empresa (excluindo o usuário atual)
+      if (email) {
+        const existingUserByEmail = await User.findOne({ 
+          email: email,
+          companyId: companyId,
+          _id: { $ne: id } // Excluir o usuário atual da verificação
+        });
+        if (existingUserByEmail) {
+          throw new Error('Email já está em uso nesta empresa');
+        }
+      }
+
+      // Verificar se o CPF já existe na mesma empresa (excluindo o usuário atual)
+      if (cpf) {
+        const existingUserByCpf = await User.findOne({ 
+          cpf: cpf,
+          companyId: companyId,
+          _id: { $ne: id } // Excluir o usuário atual da verificação
+        });
+        if (existingUserByCpf) {
+          throw new Error('CPF já está em uso nesta empresa');
+        }
+      }
+
       const user = await User.findOneAndUpdate(
         { _id: id, companyId },
         userData,
