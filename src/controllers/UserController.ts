@@ -53,8 +53,17 @@ export class UserController {
     try {
       const { id } = req.params;
       const userData: UpdateUserDto = req.body;
+      const companyId = (req as any).user.companyId;
       
-      const user = await this.userService.updateUser(id, userData);
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const user = await this.userService.updateUser(id, userData, companyId);
       
       if (!user) {
         res.status(404).json({
@@ -80,7 +89,17 @@ export class UserController {
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const deleted = await this.userService.deleteUser(id);
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const deleted = await this.userService.deleteUser(id, companyId);
       
       if (!deleted) {
         res.status(404).json({
@@ -105,7 +124,17 @@ export class UserController {
   async getUserById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const user = await this.userService.getUserById(id);
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const user = await this.userService.getUserById(id, companyId);
       
       if (!user) {
         res.status(404).json({
@@ -129,7 +158,17 @@ export class UserController {
 
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
-      const users = await this.userService.getAllUsers();
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const users = await this.userService.getAllUsers(companyId);
 
       res.status(200).json({
         success: true,

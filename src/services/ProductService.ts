@@ -2,9 +2,9 @@ import { Product, IProduct } from '../models/Product';
 import { CreateProductDto, UpdateProductDto } from '../dto/ProductDto';
 
 export class ProductService {
-  async createProduct(productData: CreateProductDto): Promise<IProduct> {
+  async createProduct(productData: CreateProductDto, companyId: string): Promise<IProduct> {
     try {
-      const product = new Product(productData);
+      const product = new Product({ ...productData, companyId });
       await product.save();
       
       return product;
@@ -13,10 +13,10 @@ export class ProductService {
     }
   }
 
-  async updateProduct(id: string, productData: UpdateProductDto): Promise<IProduct | null> {
+  async updateProduct(id: string, productData: UpdateProductDto, companyId: string): Promise<IProduct | null> {
     try {
-      const product = await Product.findByIdAndUpdate(
-        id,
+      const product = await Product.findOneAndUpdate(
+        { _id: id, companyId },
         productData,
         { new: true, runValidators: true }
       );
@@ -27,18 +27,18 @@ export class ProductService {
     }
   }
 
-  async deleteProduct(id: string): Promise<boolean> {
+  async deleteProduct(id: string, companyId: string): Promise<boolean> {
     try {
-      const result = await Product.findByIdAndDelete(id);
+      const result = await Product.findOneAndDelete({ _id: id, companyId });
       return !!result;
     } catch (error) {
       throw error;
     }
   }
 
-  async getProductById(id: string): Promise<IProduct | null> {
+  async getProductById(id: string, companyId: string): Promise<IProduct | null> {
     try {
-      return await Product.findById(id)
+      return await Product.findOne({ _id: id, companyId })
         .populate('companyId', 'name cnpj')
         .populate('categoryId', 'name');
     } catch (error) {
@@ -46,9 +46,9 @@ export class ProductService {
     }
   }
 
-  async getAllProducts(): Promise<IProduct[]> {
+  async getAllProducts(companyId: string): Promise<IProduct[]> {
     try {
-      return await Product.find()
+      return await Product.find({ companyId })
         .populate('companyId', 'name cnpj')
         .populate('categoryId', 'name');
     } catch (error) {
@@ -66,9 +66,9 @@ export class ProductService {
     }
   }
 
-  async getProductsByCategory(categoryId: string): Promise<IProduct[]> {
+  async getProductsByCategory(categoryId: string, companyId: string): Promise<IProduct[]> {
     try {
-      return await Product.find({ categoryId })
+      return await Product.find({ categoryId, companyId })
         .populate('companyId', 'name cnpj')
         .populate('categoryId', 'name');
     } catch (error) {
@@ -76,13 +76,14 @@ export class ProductService {
     }
   }
 
-  async searchProducts(query: string): Promise<IProduct[]> {
+  async searchProducts(query: string, companyId: string): Promise<IProduct[]> {
     try {
       return await Product.find({
         $or: [
           { name: { $regex: query, $options: 'i' } },
           { description: { $regex: query, $options: 'i' } }
-        ]
+        ],
+        companyId
       })
         .populate('companyId', 'name cnpj')
         .populate('categoryId', 'name');

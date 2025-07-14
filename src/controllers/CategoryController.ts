@@ -12,7 +12,17 @@ export class CategoryController {
   async createCategory(req: Request, res: Response): Promise<void> {
     try {
       const categoryData: CreateCategoryDto = req.body;
-      const category = await this.categoryService.createCategory(categoryData);
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+
+      const category = await this.categoryService.createCategory(categoryData, companyId);
 
       res.status(201).json({
         success: true,
@@ -31,8 +41,17 @@ export class CategoryController {
     try {
       const { id } = req.params;
       const categoryData: UpdateCategoryDto = req.body;
+      const companyId = (req as any).user.companyId;
       
-      const category = await this.categoryService.updateCategory(id, categoryData);
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const category = await this.categoryService.updateCategory(id, categoryData, companyId);
       
       if (!category) {
         res.status(404).json({
@@ -58,7 +77,17 @@ export class CategoryController {
   async deleteCategory(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const deleted = await this.categoryService.deleteCategory(id);
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const deleted = await this.categoryService.deleteCategory(id, companyId);
       
       if (!deleted) {
         res.status(404).json({
@@ -83,7 +112,17 @@ export class CategoryController {
   async getCategoryById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const category = await this.categoryService.getCategoryById(id);
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const category = await this.categoryService.getCategoryById(id, companyId);
       
       if (!category) {
         res.status(404).json({
@@ -107,7 +146,17 @@ export class CategoryController {
 
   async getAllCategories(req: Request, res: Response): Promise<void> {
     try {
-      const categories = await this.categoryService.getAllCategories();
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const categories = await this.categoryService.getAllCategories(companyId);
 
       res.status(200).json({
         success: true,
@@ -124,6 +173,15 @@ export class CategoryController {
   async searchCategories(req: Request, res: Response): Promise<void> {
     try {
       const { q } = req.query;
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
       
       if (!q || typeof q !== 'string') {
         res.status(400).json({
@@ -133,7 +191,7 @@ export class CategoryController {
         return;
       }
 
-      const categories = await this.categoryService.searchCategories(q);
+      const categories = await this.categoryService.searchCategories(q, companyId);
 
       res.status(200).json({
         success: true,

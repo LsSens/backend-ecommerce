@@ -20,10 +20,10 @@ export class UserService {
     }
   }
 
-  async updateUser(id: string, userData: UpdateUserDto): Promise<IUser | null> {
+  async updateUser(id: string, userData: UpdateUserDto, companyId: string): Promise<IUser | null> {
     try {
-      const user = await User.findByIdAndUpdate(
-        id,
+      const user = await User.findOneAndUpdate(
+        { _id: id, companyId },
         userData,
         { new: true, runValidators: true }
       );
@@ -34,26 +34,26 @@ export class UserService {
     }
   }
 
-  async deleteUser(id: string): Promise<boolean> {
+  async deleteUser(id: string, companyId: string): Promise<boolean> {
     try {
-      const result = await User.findByIdAndDelete(id);
+      const result = await User.findOneAndDelete({ _id: id, companyId });
       return !!result;
     } catch (error) {
       throw error;
     }
   }
 
-  async getUserById(id: string): Promise<IUser | null> {
+  async getUserById(id: string, companyId: string): Promise<IUser | null> {
     try {
-      return await User.findById(id);
+      return await User.findOne({ _id: id, companyId });
     } catch (error) {
       throw error;
     }
   }
 
-  async getAllUsers(): Promise<IUser[]> {
+  async getAllUsers(companyId: string): Promise<IUser[]> {
     try {
-      return await User.find().select('-password');
+      return await User.find({ companyId }).select('-password');
     } catch (error) {
       throw error;
     }

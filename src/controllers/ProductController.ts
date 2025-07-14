@@ -12,7 +12,17 @@ export class ProductController {
   async createProduct(req: Request, res: Response): Promise<void> {
     try {
       const productData: CreateProductDto = req.body;
-      const product = await this.productService.createProduct(productData);
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+
+      const product = await this.productService.createProduct(productData, companyId);
 
       res.status(201).json({
         success: true,
@@ -31,8 +41,17 @@ export class ProductController {
     try {
       const { id } = req.params;
       const productData: UpdateProductDto = req.body;
+      const companyId = (req as any).user.companyId;
       
-      const product = await this.productService.updateProduct(id, productData);
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const product = await this.productService.updateProduct(id, productData, companyId);
       
       if (!product) {
         res.status(404).json({
@@ -58,7 +77,17 @@ export class ProductController {
   async deleteProduct(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const deleted = await this.productService.deleteProduct(id);
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const deleted = await this.productService.deleteProduct(id, companyId);
       
       if (!deleted) {
         res.status(404).json({
@@ -83,7 +112,17 @@ export class ProductController {
   async getProductById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const product = await this.productService.getProductById(id);
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const product = await this.productService.getProductById(id, companyId);
       
       if (!product) {
         res.status(404).json({
@@ -107,7 +146,17 @@ export class ProductController {
 
   async getAllProducts(req: Request, res: Response): Promise<void> {
     try {
-      const products = await this.productService.getAllProducts();
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const products = await this.productService.getAllProducts(companyId);
 
       res.status(200).json({
         success: true,
@@ -121,27 +170,20 @@ export class ProductController {
     }
   }
 
-  async getProductsByCompany(req: Request, res: Response): Promise<void> {
-    try {
-      const { companyId } = req.params;
-      const products = await this.productService.getProductsByCompany(companyId);
-
-      res.status(200).json({
-        success: true,
-        data: products
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error instanceof Error ? error.message : 'Erro ao buscar produtos da empresa'
-      });
-    }
-  }
-
   async getProductsByCategory(req: Request, res: Response): Promise<void> {
     try {
       const { categoryId } = req.params;
-      const products = await this.productService.getProductsByCategory(categoryId);
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const products = await this.productService.getProductsByCategory(categoryId, companyId);
 
       res.status(200).json({
         success: true,
@@ -158,6 +200,15 @@ export class ProductController {
   async searchProducts(req: Request, res: Response): Promise<void> {
     try {
       const { q } = req.query;
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
       
       if (!q || typeof q !== 'string') {
         res.status(400).json({
@@ -167,7 +218,7 @@ export class ProductController {
         return;
       }
 
-      const products = await this.productService.searchProducts(q);
+      const products = await this.productService.searchProducts(q, companyId);
 
       res.status(200).json({
         success: true,

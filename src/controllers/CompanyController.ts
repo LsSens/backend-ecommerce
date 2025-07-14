@@ -31,8 +31,17 @@ export class CompanyController {
     try {
       const { id } = req.params;
       const companyData: UpdateCompanyDto = req.body;
+      const companyId = (req as any).user.companyId;
       
-      const company = await this.companyService.updateCompany(id, companyData);
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const company = await this.companyService.updateCompany(id, companyData, companyId);
       
       if (!company) {
         res.status(404).json({
@@ -83,7 +92,17 @@ export class CompanyController {
   async getCompanyById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const company = await this.companyService.getCompanyById(id);
+      const companyId = (req as any).user.companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const company = await this.companyService.getCompanyById(id, companyId);
       
       if (!company) {
         res.status(404).json({

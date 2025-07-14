@@ -18,10 +18,10 @@ export class CompanyService {
     }
   }
 
-  async updateCompany(id: string, companyData: UpdateCompanyDto): Promise<ICompany | null> {
+  async updateCompany(id: string, companyData: UpdateCompanyDto, companyId: string): Promise<ICompany | null> {
     try {
-      const company = await Company.findByIdAndUpdate(
-        id,
+      const company = await Company.findOneAndUpdate(
+        { _id: id },
         companyData,
         { new: true, runValidators: true }
       );
@@ -41,9 +41,9 @@ export class CompanyService {
     }
   }
 
-  async getCompanyById(id: string): Promise<ICompany | null> {
+  async getCompanyById(id: string, companyId: string): Promise<ICompany | null> {
     try {
-      return await Company.findById(id).populate('userId', 'name email');
+      return await Company.findOne({ _id: id }).populate('userId', 'name email');
     } catch (error) {
       throw error;
     }

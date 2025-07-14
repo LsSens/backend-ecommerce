@@ -50,7 +50,8 @@ export const authenticateToken = async (
       id: (user._id as any).toString(),
       email: user.email,
       name: user.name,
-      role: user.role
+      role: user.role,
+      companyId: user.companyId
     };
 
     next();
