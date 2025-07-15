@@ -12,7 +12,7 @@ export class ProductController {
   async createProduct(req: Request, res: Response): Promise<void> {
     try {
       const productData: CreateProductDto = req.body;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -41,7 +41,7 @@ export class ProductController {
     try {
       const { id } = req.params;
       const productData: UpdateProductDto = req.body;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -77,7 +77,7 @@ export class ProductController {
   async deleteProduct(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -112,7 +112,7 @@ export class ProductController {
   async getProductById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -146,7 +146,7 @@ export class ProductController {
 
   async getAllProducts(req: Request, res: Response): Promise<void> {
     try {
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -173,7 +173,7 @@ export class ProductController {
   async getProductsByCategory(req: Request, res: Response): Promise<void> {
     try {
       const { categoryId } = req.params;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -217,7 +217,7 @@ export class ProductController {
   async searchProducts(req: Request, res: Response): Promise<void> {
     try {
       const { q } = req.query;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({

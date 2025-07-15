@@ -12,7 +12,7 @@ export class UserController {
   async register(req: Request, res: Response): Promise<void> {
     try {
       const userData: CreateUserDto = req.body;
-      const companyId = (req as any).user?.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -65,7 +65,7 @@ export class UserController {
     try {
       const { id } = req.params;
       const userData: UpdateUserDto = req.body;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -101,7 +101,7 @@ export class UserController {
   async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -136,7 +136,7 @@ export class UserController {
   async getUserById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -170,7 +170,7 @@ export class UserController {
 
   async getAllUsers(req: Request, res: Response): Promise<void> {
     try {
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({

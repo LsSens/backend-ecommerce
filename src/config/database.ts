@@ -13,15 +13,13 @@ export const connectDatabase = async (): Promise<void> => {
     
     logger.info('✅ Conectado ao MongoDB');
     
-    await runMigrations();
-    
   } catch (error) {
     logger.error('❌ Erro ao conectar ao MongoDB:', error);
     throw error;
   }
 };
 
-const runMigrations = async (): Promise<void> => {
+export const runMigrations = async (): Promise<void> => {
   try {
     logger.info('🔄 Iniciando migrações do banco de dados...');
     
@@ -150,17 +148,17 @@ const createIndexIfNotExists = async (collection: any, indexSpec: any, options: 
 
 const createInitialData = async (): Promise<void> => {
   try {
-    const adminExists = await User.findOne({ role: 'Admin' });
-    
+    let adminExists = await User.findOne({ role: 'Admin' });
+      
     if (!adminExists) {
-      const adminUser = new User({
+      adminExists = new User({
         name: 'Administrador',
         email: 'admin@ecommerce.com',
         password: 'admin123',
-        role: 'Admin'
+        role: 'Admin',
       });
       
-      await adminUser.save();
+      await adminExists.save();
       logger.info('✅ Usuário administrador padrão criado');
     }
     
@@ -171,10 +169,14 @@ const createInitialData = async (): Promise<void> => {
         name: 'Empresa Padrão',
         cnpj: '12.345.678/0001-90',
         address: 'Rua Exemplo, 123 - São Paulo, SP',
-        domains: ['exemplo.com', 'www.exemplo.com']
+        domains: ['exemplo.com', 'www.exemplo.com', 'localhost:3000']
       });
       
       await defaultCompany.save();
+
+      adminExists.companyId = defaultCompany._id.toString();
+      await adminExists.save();
+
       logger.info('✅ Empresa padrão criada');
     }
     

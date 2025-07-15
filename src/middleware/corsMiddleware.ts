@@ -43,11 +43,15 @@ export const corsMiddleware = async (req: AuthenticatedRequest, res: Response, n
       });
     }
 
+    // Log para debug
+    logger.info(`Procurando domínio: ${domain}`);
+    
     const company = await Company.findOne({
       $or: [
         { domains: { $in: [domain] } },
         { domains: { $in: [`http://${domain}`] } },
-        { domains: { $in: [`https://${domain}`] } }
+        { domains: { $in: [`https://${domain}`] } },
+        { domains: { $in: [domain.replace('http://', '').replace('https://', '')] } }
       ]
     });
 
@@ -91,7 +95,8 @@ function extractDomain(url: string): string | null {
       : `http://${url}`;
     
     const urlObj = new URL(urlWithProtocol);
-    return urlObj.origin;
+    // Retorna apenas o hostname (host + port se existir)
+    return urlObj.host;
   } catch (error) {
     return null;
   }

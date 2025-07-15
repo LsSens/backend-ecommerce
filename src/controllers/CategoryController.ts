@@ -12,7 +12,7 @@ export class CategoryController {
   async createCategory(req: Request, res: Response): Promise<void> {
     try {
       const categoryData: CreateCategoryDto = req.body;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -41,7 +41,7 @@ export class CategoryController {
     try {
       const { id } = req.params;
       const categoryData: UpdateCategoryDto = req.body;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -77,7 +77,7 @@ export class CategoryController {
   async deleteCategory(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -112,7 +112,7 @@ export class CategoryController {
   async getCategoryById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -146,7 +146,7 @@ export class CategoryController {
 
   async getAllCategories(req: Request, res: Response): Promise<void> {
     try {
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({
@@ -173,7 +173,7 @@ export class CategoryController {
   async searchCategories(req: Request, res: Response): Promise<void> {
     try {
       const { q } = req.query;
-      const companyId = (req as any).user.companyId;
+      const companyId = (req as any).companyId;
       
       if (!companyId) {
         res.status(400).json({

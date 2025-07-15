@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import { logger } from '../utils/logger';
-import { connectDatabase, disconnectDatabase } from '../config/database';
+import { connectDatabase, disconnectDatabase, runMigrations } from '../config/database';
 
 dotenv.config();
 
@@ -9,10 +9,9 @@ const runMigration = async (): Promise<void> => {
   try {
     logger.info('🚀 Iniciando script de migração...');
     
-    // Conectar ao banco de dados
     await connectDatabase();
     
-    logger.info('✅ Migração concluída com sucesso!');
+    await runMigrations();
     
   } catch (error) {
     logger.error('❌ Erro durante a migração:', error);
