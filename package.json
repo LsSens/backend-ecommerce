@@ -8,7 +8,9 @@
     "dev": "nodemon src/server.ts",
     "build": "tsc",
     "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint src/**/*.ts --fix"
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "migrate": "ts-node src/scripts/migrate.ts",
+    "migrate:dev": "ts-node -r dotenv/config src/scripts/migrate.ts"
   },
   "keywords": [
     "ecommerce",

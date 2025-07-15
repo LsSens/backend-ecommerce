@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { AuthenticatedRequest } from './corsMiddleware';
 import { logger } from '../utils/logger';
 
@@ -15,7 +15,7 @@ export const requireCompany = (req: AuthenticatedRequest, res: Response, next: N
     });
   }
   
-  next();
+  return next();
 };
 
 /**
@@ -23,5 +23,5 @@ export const requireCompany = (req: AuthenticatedRequest, res: Response, next: N
  * Não é necessário para rotas públicas.
  */
 export const optionalCompany = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-  next();
+  return next();
 }; 

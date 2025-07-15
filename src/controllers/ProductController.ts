@@ -197,6 +197,23 @@ export class ProductController {
     }
   }
 
+  async getProductsByCompany(req: Request, res: Response): Promise<void> {
+    try {
+      const { companyId } = req.params;
+      const products = await this.productService.getProductsByCompany(companyId);
+
+      res.status(200).json({
+        success: true,
+        data: products
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : 'Erro ao buscar produtos da empresa'
+      });
+    }
+  }
+
   async searchProducts(req: Request, res: Response): Promise<void> {
     try {
       const { q } = req.query;
