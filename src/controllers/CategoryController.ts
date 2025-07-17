@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CategoryService } from '../services/CategoryService';
-import { CreateCategoryDto, UpdateCategoryDto } from '../dto/CategoryDto';
+import { CreateCategoryDto, UpdateCategoryDto } from '../dto/Category';
 
 export class CategoryController {
   private categoryService: CategoryService;

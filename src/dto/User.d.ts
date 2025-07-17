@@ -65,8 +65,15 @@ export class UpdateUserDto {
   @IsIn(['Admin', 'Customer', 'Operator'], { message: 'Role deve ser Admin, Customer ou Operator' })
   role?: 'Admin' | 'Customer' | 'Operator';
 
+  companyId: string;
+  
   @IsOptional()
-  companyId?: string;
+  cart?: {
+    products: {
+      productId: string;
+      quantity: number;
+    }[];
+  };
 }
 
 export class LoginDto {

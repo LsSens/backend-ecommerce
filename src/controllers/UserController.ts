@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/UserService';
-import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/UserDto';
+import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/User';
 
 export class UserController {
   private userService: UserService;
@@ -14,15 +14,6 @@ export class UserController {
       const userData: CreateUserDto = req.body;
       const companyId = (req as any).companyId;
       
-      if (!companyId) {
-        res.status(400).json({
-          success: false,
-          message: 'Usuário não está associado a uma empresa'
-        });
-        return;
-      }
-
-      // Adicionar o companyId aos dados do usuário
       const userDataWithCompany = { ...userData, companyId };
       const user = await this.userService.createUser(userDataWithCompany);
 
@@ -67,14 +58,6 @@ export class UserController {
       const userData: UpdateUserDto = req.body;
       const companyId = (req as any).companyId;
       
-      if (!companyId) {
-        res.status(400).json({
-          success: false,
-          message: 'Usuário não está associado a uma empresa'
-        });
-        return;
-      }
-      
       const user = await this.userService.updateUser(id, userData, companyId);
       
       if (!user) {
@@ -103,14 +86,6 @@ export class UserController {
       const { id } = req.params;
       const companyId = (req as any).companyId;
       
-      if (!companyId) {
-        res.status(400).json({
-          success: false,
-          message: 'Usuário não está associado a uma empresa'
-        });
-        return;
-      }
-      
       const deleted = await this.userService.deleteUser(id, companyId);
       
       if (!deleted) {
@@ -138,14 +113,6 @@ export class UserController {
       const { id } = req.params;
       const companyId = (req as any).companyId;
       
-      if (!companyId) {
-        res.status(400).json({
-          success: false,
-          message: 'Usuário não está associado a uma empresa'
-        });
-        return;
-      }
-      
       const user = await this.userService.getUserById(id, companyId);
       
       if (!user) {
@@ -172,14 +139,6 @@ export class UserController {
     try {
       const companyId = (req as any).companyId;
       
-      if (!companyId) {
-        res.status(400).json({
-          success: false,
-          message: 'Usuário não está associado a uma empresa'
-        });
-        return;
-      }
-      
       const users = await this.userService.getAllUsers(companyId);
 
       res.status(200).json({
@@ -190,6 +149,67 @@ export class UserController {
       res.status(400).json({
         success: false,
         message: error instanceof Error ? error.message : 'Erro ao buscar usuários'
+      });
+    }
+  }
+
+  async getUserCart(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const companyId = (req as any).companyId;
+
+      const cart = await this.userService.getUserCart(id, companyId);
+      
+      res.status(200).json({
+        success: true,
+        data: cart
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : 'Erro ao buscar carrinho de compras'
+      });
+    }
+  }
+
+  async addProductToCart(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const { productId, quantity } = req.body;
+      const companyId = (req as any).companyId;
+
+      const cart = await this.userService.addProductToCart(id, productId, quantity, companyId);
+
+      res.status(200).json({
+        success: true,
+        message: 'Produto adicionado ao carrinho com sucesso',
+        data: cart
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : 'Erro ao adicionar produto ao carrinho'
+      });
+    }
+  }
+
+  async removeProductFromCart(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const { productId } = req.body;
+      const companyId = (req as any).companyId;
+
+      const cart = await this.userService.removeProductFromCart(id, productId, companyId);
+
+      res.status(200).json({
+        success: true,
+        message: 'Produto removido do carrinho com sucesso',
+        data: cart
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : 'Erro ao remover produto do carrinho'
       });
     }
   }

@@ -1,5 +1,5 @@
 import { Category, ICategory } from '../models/Category';
-import { CreateCategoryDto, UpdateCategoryDto } from '../dto/CategoryDto';
+import { CreateCategoryDto, UpdateCategoryDto } from '../dto/Category';
 
 export class CategoryService {
     async createCategory(categoryData: CreateCategoryDto, companyId: string): Promise<ICategory> {

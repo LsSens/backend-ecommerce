@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { CategoryController } from '../controllers/CategoryController';
 import { authenticateToken } from '../middleware/auth';
 import { validateDto } from '../middleware/validation';
-import { CreateCategoryDto, UpdateCategoryDto } from '../dto/CategoryDto';
+import { CreateCategoryDto, UpdateCategoryDto } from '../dto/Category';
 
 /**
  * @swagger

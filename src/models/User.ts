@@ -13,6 +13,12 @@ export interface IUser extends Document {
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
   role: 'Admin' | 'Customer' | 'Operator';
+  cart?: {
+    products: {
+      productId: string;
+      quantity: number;
+    }[];
+  };
 }
 
 const userSchema = new Schema<IUser>({
@@ -57,6 +63,10 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: false,
     ref: 'Company'
+  },
+  cart: {
+    type: Object,
+    required: false
   }
 }, {
   timestamps: true,

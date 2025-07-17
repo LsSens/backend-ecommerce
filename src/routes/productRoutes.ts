@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { ProductController } from '../controllers/ProductController';
 import { authenticateToken } from '../middleware/auth';
 import { validateDto } from '../middleware/validation';
-import { CreateProductDto, UpdateProductDto } from '../dto/ProductDto';
+import { CreateProductDto, UpdateProductDto } from '../dto/Product';
 
 /**
  * @swagger

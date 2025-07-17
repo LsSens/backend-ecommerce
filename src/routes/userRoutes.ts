@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/UserController';
 import { authenticateToken } from '../middleware/auth';
-import { validateDto } from '../middleware/validation';
+import { validateDto, validateCompanyId, validateUserExists, validateUserAuthorization, validateCartOperations } from '../middleware/validation';
 import { requirePermissions } from '../middleware/permissions';
-import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/UserDto';
+import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/User';
 
 /**
  * @swagger
@@ -170,14 +170,109 @@ import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/UserDto';
  *         description: Usuário não encontrado
  */
 
+/**
+ * @swagger
+ * /api/users/{id}/cart:
+ *   get:
+ *     summary: Busca carrinho de compras do usuário
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Carrinho de compras encontrado
+ *       404:
+ *         description: Carrinho de compras não encontrado
+ *       403:
+ *         description: Usuário não autorizado
+ *       400:
+ *         description: Erro de validação
+ *       401:
+ *         description: Não autorizado
+ *   post:
+ *     summary: Adiciona produto ao carrinho de compras
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productId:
+ *                 type: string
+ *               quantity:  
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Produto adicionado ao carrinho
+ *       404:
+ *         description: Produto não encontrado
+ *       403:
+ *         description: Usuário não autorizado
+ *       400:
+ *         description: Erro de validação
+ *       401:
+ *         description: Não autorizado
+ *   delete:
+ *     summary: Remove produto do carrinho de compras
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productId:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Produto removido do carrinho
+ *       404:
+ *         description: Produto não encontrado
+ *       403:
+ *         description: Usuário não autorizado
+ *       400:
+ *         description: Erro de validação
+ *       401:
+ *         description: Não autorizado
+ * 
+ */
+
 const router = Router();
 const userController = new UserController();
 
 router.post('/register', validateDto(CreateUserDto), userController.register.bind(userController));
 router.post('/login', validateDto(LoginDto), userController.login.bind(userController));
-router.get('/', authenticateToken, requirePermissions.Operator, userController.getAllUsers.bind(userController));
-router.get('/:id', authenticateToken, requirePermissions.Operator, userController.getUserById.bind(userController));
-router.put('/:id', authenticateToken, requirePermissions.Operator, validateDto(UpdateUserDto), userController.updateUser.bind(userController));
-router.delete('/:id', authenticateToken, requirePermissions.Admin, userController.deleteUser.bind(userController));
+router.get('/', authenticateToken, validateCompanyId, requirePermissions.Operator, userController.getAllUsers.bind(userController));
+router.get('/:id', authenticateToken, validateCompanyId, validateUserExists, requirePermissions.Operator, userController.getUserById.bind(userController));
+router.put('/:id', authenticateToken, validateCompanyId, validateUserExists, requirePermissions.Operator, validateDto(UpdateUserDto), userController.updateUser.bind(userController));
+router.delete('/:id', authenticateToken, validateCompanyId, validateUserExists, requirePermissions.Admin, userController.deleteUser.bind(userController));
+router.get('/:id/cart', authenticateToken, validateCartOperations, userController.getUserCart.bind(userController));
+router.post('/:id/cart', authenticateToken, validateCartOperations, userController.addProductToCart.bind(userController));
+router.delete('/:id/cart', authenticateToken, validateCartOperations, userController.removeProductFromCart.bind(userController));
 
 export default router; 

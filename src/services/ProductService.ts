@@ -1,5 +1,5 @@
 import { Product, IProduct } from '../models/Product';
-import { CreateProductDto, UpdateProductDto } from '../dto/ProductDto';
+import { CreateProductDto, UpdateProductDto } from '../dto/Product';
 
 export class ProductService {
   async createProduct(productData: CreateProductDto, companyId: string): Promise<IProduct> {

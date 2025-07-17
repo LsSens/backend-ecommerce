@@ -3,7 +3,7 @@ import { CompanyController } from '../controllers/CompanyController';
 import { authenticateToken } from '../middleware/auth';
 import { validateDto } from '../middleware/validation';
 import { validateUniqueDomains } from '../middleware/corsMiddleware';
-import { CreateCompanyDto, UpdateCompanyDto } from '../dto/CompanyDto';
+import { CreateCompanyDto, UpdateCompanyDto } from '../dto/Company.';
 
 /**
  * @swagger
