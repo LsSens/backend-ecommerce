@@ -3,6 +3,17 @@ import jwt from 'jsonwebtoken';
 import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/User';
 import { Product } from '../models/Product';
 
+interface CartProduct {
+  productId: string;
+  quantity: number;
+  product?: any;
+  itemTotal?: number;
+}
+
+interface CartWithProducts {
+  products: CartProduct[];
+}
+
 export class UserService {
   async createUser(userData: CreateUserDto): Promise<IUser> {
     try {
@@ -140,13 +151,40 @@ export class UserService {
     }
   }
 
-  async getUserCart(id: string, companyId: string): Promise<IUser['cart'] | null> {
+  async getUserCart(id: string, companyId: string): Promise<CartWithProducts | null> {
     try {
       const user = await User.findOne({ _id: id, companyId });
       if (!user) {
         throw new Error('Usuário não encontrado');
       }
-      return user.cart;
+      
+      if (!user.cart || !user.cart.products.length) {
+        return { products: [] };
+      }
+
+      const productIds = user.cart.products.map(item => item.productId);
+      const products = await Product.find({ 
+        _id: { $in: productIds }, 
+        companyId 
+      }).select('name price description image');
+
+      const cartWithProducts = {
+        products: user.cart.products.map(cartItem => {
+          const product = products.find(p => p._id.toString() === cartItem.productId);
+          return {
+            productId: cartItem.productId,
+            ...(product ? {
+              name: product.name,
+              price: product.price,
+              description: product.description,
+              image: product.image
+            } : null),
+            quantity: cartItem.quantity
+          };
+        })
+      };
+
+      return cartWithProducts;
     } catch (error) {
       throw error;
     }

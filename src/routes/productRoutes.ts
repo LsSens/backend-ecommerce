@@ -136,56 +136,14 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
  *       404:
  *         description: Produto não encontrado
  */
-
-/**
- * @swagger
- * /api/products/company/{companyId}:
- *   get:
- *     summary: Lista produtos por empresa
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: companyId
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Lista de produtos da empresa
- *       404:
- *         description: Nenhum produto encontrado para a empresa
- */
-
-/**
- * @swagger
- * /api/products/category/{categoryId}:
- *   get:
- *     summary: Lista produtos por categoria
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: categoryId
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Lista de produtos da categoria
- *       404:
- *         description: Nenhum produto encontrado para a categoria
- */
-
 const router = Router();
 const productController = new ProductController();
 
-// Rotas públicas para visualização
 router.get('/', productController.getAllProducts.bind(productController));
 router.get('/search', productController.searchProducts.bind(productController));
 router.get('/:id', productController.getProductById.bind(productController));
-router.get('/company/:companyId', productController.getProductsByCompany.bind(productController));
-router.get('/category/:categoryId', productController.getProductsByCategory.bind(productController));
+router.get('/variables', productController.getProductVariables.bind(productController));
 
-// Rotas protegidas para CRUD
 router.post('/', authenticateToken, validateDto(CreateProductDto), productController.createProduct.bind(productController));
 router.put('/:id', authenticateToken, validateDto(UpdateProductDto), productController.updateProduct.bind(productController));
 router.delete('/:id', authenticateToken, productController.deleteProduct.bind(productController));

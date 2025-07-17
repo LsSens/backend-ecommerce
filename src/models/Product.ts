@@ -6,6 +6,11 @@ export interface IProduct extends Document {
   description: string;
   price: number;
   categoryId?: mongoose.Types.ObjectId;
+  image?: string;
+  variables?: {
+    color?: string;
+    size?: string;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -38,6 +43,14 @@ const productSchema = new Schema<IProduct>({
   categoryId: {
     type: Schema.Types.ObjectId,
     ref: 'Category',
+    required: false
+  },
+  image: {
+    type: String,
+    required: false
+  },
+  variables: {
+    type: Object,
     required: false
   }
 }, {

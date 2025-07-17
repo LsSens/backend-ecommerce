@@ -91,4 +91,13 @@ export class ProductService {
       throw error;
     }
   }
+
+  async getProductVariables(id: string, companyId: string): Promise<IProduct['variables']> {
+    try {
+      const product = await Product.findOne({ _id: id, companyId });
+      return product?.variables || {};
+    } catch (error) {
+      throw error;
+    }
+  }
 } 

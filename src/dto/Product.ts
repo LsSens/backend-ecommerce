@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, MinLength, MaxLength, Min } from 'class-validator';
+import { IsString, IsNumber, IsOptional, MinLength, MaxLength, Min, IsObject } from 'class-validator';
 
 export class CreateProductDto {
   @IsString({ message: 'Nome do produto deve ser uma string' })
@@ -21,6 +21,17 @@ export class CreateProductDto {
   @IsOptional()
   @IsString({ message: 'ID da categoria deve ser uma string' })
   categoryId?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Imagem deve ser uma string' })
+  image?: string;
+
+  @IsOptional()
+  @IsObject({ message: 'Variáveis deve ser um objeto' })
+  variables?: {
+    color?: string;
+    size?: string;
+  };
 }
 
 export class UpdateProductDto {
@@ -44,4 +55,15 @@ export class UpdateProductDto {
   @IsOptional()
   @IsString({ message: 'ID da categoria deve ser uma string' })
   categoryId?: string;
+
+  @IsOptional()
+  @IsString({ message: 'Imagem deve ser uma string' })
+  image?: string;
+
+  @IsOptional()
+  @IsObject({ message: 'Variáveis deve ser um objeto' })
+  variables?: {
+    color?: string;
+    size?: string;
+  };
 } 

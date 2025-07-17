@@ -248,4 +248,31 @@ export class ProductController {
       });
     }
   }
+
+  async getProductVariables(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params;
+      const companyId = (req as any).companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const variables = await this.productService.getProductVariables(id, companyId);
+
+      res.status(200).json({
+        success: true,
+        data: variables
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : 'Erro ao buscar variáveis do produto'
+      });
+    }
+  }
 } 

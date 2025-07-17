@@ -11,7 +11,6 @@ import { corsMiddleware } from './middleware/corsMiddleware';
 import { logger } from './utils/logger';
 
 import userRoutes from './routes/userRoutes';
-import companyRoutes from './routes/companyRoutes';
 import productRoutes from './routes/productRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import swaggerUi from 'swagger-ui-express';
@@ -52,7 +51,6 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/users', userRoutes);
-app.use('/api/companies', companyRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 
