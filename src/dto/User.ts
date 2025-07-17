@@ -82,6 +82,4 @@ export class LoginDto {
 
   @IsString({ message: 'Senha deve ser uma string' })
   password!: string;
-
-  companyId!: string;
 } 

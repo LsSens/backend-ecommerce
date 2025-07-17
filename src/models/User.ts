@@ -66,7 +66,8 @@ const userSchema = new Schema<IUser>({
   },
   cart: {
     type: Object,
-    required: false
+    required: false,
+    default: { products: [] }
   }
 }, {
   timestamps: true,

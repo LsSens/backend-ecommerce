@@ -95,8 +95,7 @@ export const validateUserAuthorization = async (req: Request, res: Response, nex
       return;
     }
 
-    // Verifica se o usuário logado é o próprio usuário ou um admin
-    const loggedUserId = (req as any).userId; // Assumindo que o userId está disponível no request
+    const loggedUserId = (req as any).user.id;
     const loggedUser = await userService.getUserById(loggedUserId, companyId);
 
     if (loggedUser?._id !== id && loggedUser?.role !== 'Admin') {
@@ -107,7 +106,6 @@ export const validateUserAuthorization = async (req: Request, res: Response, nex
       return;
     }
 
-    // Adiciona o usuário encontrado ao request para uso posterior
     (req as any).foundUser = user;
     next();
   } catch (error) {

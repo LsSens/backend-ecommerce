@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CompanyService } from '../services/CompanyService';
-import { CreateCompanyDto, UpdateCompanyDto } from '../dto/Company.';
+import { CreateCompanyDto, UpdateCompanyDto } from '../dto/Company';
 
 export class CompanyController {
   private companyService: CompanyService;

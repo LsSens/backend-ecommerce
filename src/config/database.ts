@@ -179,6 +179,35 @@ const createInitialData = async (): Promise<void> => {
 
       logger.info('✅ Empresa padrão criada');
     }
+
+    const categoryExists = await Category.findOne();
+    
+    if (!categoryExists) {
+      const defaultCategory = new Category({
+        name: 'Categoria Padrão',
+        companyId: companyExists?._id.toString()
+      });
+
+      await defaultCategory.save();
+
+      logger.info('✅ Categoria padrão criada');
+    }
+
+    const productExists = await Product.findOne();
+    
+    if (!productExists) {
+      const defaultProduct = new Product({
+        name: 'Produto Padrão',
+        companyId: companyExists?._id.toString(),
+        price: 100,
+        description: 'Descrição do produto padrão',
+        categoryId: categoryExists?._id.toString()
+      });
+
+      await defaultProduct.save();
+
+      logger.info('✅ Produto padrão criado');
+    }
     
   } catch (error) {
     logger.error('❌ Erro ao criar dados iniciais:', error);

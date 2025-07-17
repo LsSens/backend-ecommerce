@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/UserController';
 import { authenticateToken } from '../middleware/auth';
-import { validateDto, validateCompanyId, validateUserExists, validateUserAuthorization, validateCartOperations } from '../middleware/validation';
+import { validateDto, validateCompanyId, validateUserExists, validateCartOperations } from '../middleware/validation';
 import { requirePermissions } from '../middleware/permissions';
-import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/User';
+import { CreateUserDto, LoginDto, UpdateUserDto } from '../dto/User';
 
 /**
  * @swagger
@@ -39,8 +39,6 @@ import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/User';
  *                 type: string
  *               address:
  *                 type: string
- *               companyId:
- *                 type: string
  *               role:
  *                 type: string
  *                 enum: [Admin, Customer, Operator]
@@ -70,8 +68,6 @@ import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/User';
  *               email:
  *                 type: string
  *               password:
- *                 type: string
- *               companyId:
  *                 type: string
  *     responses:
  *       200:
@@ -141,8 +137,6 @@ import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/User';
  *               phone:
  *                 type: string
  *               address:
- *                 type: string
- *               companyId:
  *                 type: string
  *               role:
  *                 type: string

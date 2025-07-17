@@ -1,5 +1,5 @@
 import { Company, ICompany } from '../models/Company';
-import { CreateCompanyDto, UpdateCompanyDto } from '../dto/Company.';
+import { CreateCompanyDto, UpdateCompanyDto } from '../dto/Company';
 
 export class CompanyService {
   async createCompany(companyData: CreateCompanyDto): Promise<ICompany> {

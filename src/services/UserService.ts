@@ -1,7 +1,7 @@
 import { User, IUser } from '../models/User';
 import jwt from 'jsonwebtoken';
 import { CreateUserDto, UpdateUserDto, LoginDto } from '../dto/User';
-import { Product } from '@/models/Product';
+import { Product } from '../models/Product';
 
 export class UserService {
   async createUser(userData: CreateUserDto): Promise<IUser> {
@@ -104,9 +104,9 @@ export class UserService {
     }
   }
 
-  async login(loginData: LoginDto): Promise<{ user: IUser; token: string }> {
+  async login(loginData: LoginDto, companyId: string): Promise<{ user: IUser; token: string }> {
     try {
-      const user = await User.findOne({ email: loginData.email, companyId: loginData.companyId });
+      const user = await User.findOne({ email: loginData.email, companyId });
       if (!user) {
         throw new Error('Email ou senha inválidos');
       }
@@ -170,16 +170,25 @@ export class UserService {
         throw new Error('Produto não encontrado');
       }
 
+      if (quantity <= 0) {
+        throw new Error('Quantidade inválida');
+      }
+
       const cart = user.cart;
       const productIndex = cart.products.findIndex(p => p.productId === productId);
+      
       if (productIndex !== -1) {
         cart.products[productIndex].quantity += quantity;
       } else {
         cart.products.push({ productId, quantity });
       }
-
-      await user.save();
-      return cart;
+      user.markModified('cart');
+      const savedUser = await User.findOneAndUpdate(
+        { _id: id, companyId },
+        { cart: cart },
+        { new: true, runValidators: true }
+      );
+      return savedUser.cart;
     } catch (error) {
       throw error;
     }
@@ -202,8 +211,52 @@ export class UserService {
         cart.products.splice(productIndex, 1);
       }
 
-      await user.save();
-      return cart;
+      const savedUser = await User.findOneAndUpdate(
+        { _id: id, companyId },
+        { cart: cart },
+        { new: true, runValidators: true }
+      );
+      return savedUser.cart;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updateProductQuantityInCart(id: string, productId: string, quantity: number, companyId: string): Promise<IUser['cart'] | null> {
+    try {
+      const user = await User.findOne({ _id: id, companyId });
+      if (!user) {
+        throw new Error('Usuário não encontrado');
+      }
+
+      if (!user.cart) {
+        throw new Error('Carrinho de compras não encontrado');
+      }
+
+      const product = await Product.findOne({ _id: productId, companyId });
+      if (!product) {
+        throw new Error('Produto não encontrado');
+      }
+
+      if (quantity <= 0) {
+        throw new Error('Quantidade inválida');
+      }
+
+      const cart = user.cart;
+      const productIndex = cart.products.findIndex(p => p.productId === productId);
+      
+      if (productIndex !== -1) {
+        cart.products[productIndex].quantity = quantity;
+      } else {
+        throw new Error('Produto não encontrado no carrinho');
+      }
+
+      const savedUser = await User.findOneAndUpdate(
+        { _id: id, companyId },
+        { cart: cart },
+        { new: true, runValidators: true }
+      );
+      return savedUser.cart;
     } catch (error) {
       throw error;
     }

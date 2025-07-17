@@ -33,8 +33,8 @@ export class UserController {
   async login(req: Request & { companyId?: string }, res: Response): Promise<void> {
     try {
       const companyId = req.companyId;
-      const loginData: LoginDto = { ...req.body, companyId };
-      const { user, token } = await this.userService.login(loginData);
+      const loginData: LoginDto = { ...req.body };
+      const { user, token } = await this.userService.login(loginData, companyId);
 
       res.status(200).json({
         success: true,
