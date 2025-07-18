@@ -94,12 +94,15 @@ export class ProductService {
 
   async getProductVariables(companyId: string): Promise<any[]> {
     try {
-      const products = await Product.find({ companyId }).select('variables -_id');
+      const products = await Product.find({ companyId });
       
       const allVariables: any[] = [];
       products.forEach(product => {
         if (product.variables && Array.isArray(product.variables)) {
-          allVariables.push(...product.variables);
+          allVariables.push(...product.variables.map(variable => ({
+            ...JSON.parse(JSON.stringify(variable)),
+            productId: product._id
+          })));
         }
       });
       

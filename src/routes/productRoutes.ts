@@ -205,8 +205,8 @@ const productController = new ProductController();
 
 router.get('/', productController.getAllProducts.bind(productController));
 router.get('/search', productController.searchProducts.bind(productController));
-router.get('/:id', productController.getProductById.bind(productController));
 router.get('/variables', productController.getProductVariables.bind(productController));
+router.get('/:id', productController.getProductById.bind(productController));
 
 router.post('/', authenticateToken, validateDto(CreateProductDto), productController.createProduct.bind(productController));
 router.put('/:id', authenticateToken, validateDto(UpdateProductDto), productController.updateProduct.bind(productController));
