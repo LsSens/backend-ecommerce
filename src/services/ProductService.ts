@@ -92,10 +92,18 @@ export class ProductService {
     }
   }
 
-  async getProductVariables(id: string, companyId: string): Promise<IProduct['variables']> {
+  async getProductVariables(companyId: string): Promise<any[]> {
     try {
-      const product = await Product.findOne({ _id: id, companyId });
-      return product?.variables || {};
+      const products = await Product.find({ companyId }).select('variables -_id');
+      
+      const allVariables: any[] = [];
+      products.forEach(product => {
+        if (product.variables && Array.isArray(product.variables)) {
+          allVariables.push(...product.variables);
+        }
+      });
+      
+      return allVariables;
     } catch (error) {
       throw error;
     }

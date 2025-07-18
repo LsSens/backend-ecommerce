@@ -47,6 +47,21 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
  *                 type: number
  *               categoryId:
  *                 type: string
+ *               variables:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     quantity:
+ *                       type: number
+ *                     price:
+ *                       type: number
+ *                     image:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *               quantity:
+ *                 type: number
  *     responses:
  *       201:
  *         description: Produto criado com sucesso
@@ -114,6 +129,21 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
  *                 type: number
  *               categoryId:
  *                 type: string
+ *               variables:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     quantity:
+ *                       type: number
+ *                     price:
+ *                       type: number
+ *                     image:
+ *                       type: string
+ *                     name:
+ *                       type: string
+ *               quantity:
+ *                 type: number
  *     responses:
  *       200:
  *         description: Produto atualizado
@@ -136,6 +166,40 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
  *       404:
  *         description: Produto não encontrado
  */
+
+/**
+ * @swagger
+ * /api/products/variables:
+ *   get:
+ *     summary: Busca variáveis de todos os produtos
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:   
+ *       200:
+ *         description: Lista de variáveis de todos os produtos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       quantity:
+ *                         type: number
+ *                       price:
+ *                         type: number
+ *                       image:
+ *                         type: string
+ *                       name:
+ *                         type: string
+ */
+
 const router = Router();
 const productController = new ProductController();
 

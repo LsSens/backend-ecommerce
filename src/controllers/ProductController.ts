@@ -251,7 +251,6 @@ export class ProductController {
 
   async getProductVariables(req: Request, res: Response): Promise<void> {
     try {
-      const { id } = req.params;
       const companyId = (req as any).companyId;
       
       if (!companyId) {
@@ -262,7 +261,7 @@ export class ProductController {
         return;
       }
       
-      const variables = await this.productService.getProductVariables(id, companyId);
+      const variables = await this.productService.getProductVariables(companyId);
 
       res.status(200).json({
         success: true,

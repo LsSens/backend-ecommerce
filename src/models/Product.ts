@@ -1,5 +1,13 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
+// Interface para a estrutura de uma variável
+interface ProductVariable {
+  quantity: number;
+  price: number;
+  image: string;
+  name: string;
+}
+
 export interface IProduct extends Document {
   name: string;
   companyId: mongoose.Types.ObjectId;
@@ -7,10 +15,8 @@ export interface IProduct extends Document {
   price: number;
   categoryId?: mongoose.Types.ObjectId;
   image?: string;
-  variables?: {
-    color?: string;
-    size?: string;
-  };
+  variables?: ProductVariable[];
+  quantity: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -50,8 +56,18 @@ const productSchema = new Schema<IProduct>({
     required: false
   },
   variables: {
-    type: Object,
+    type: [{
+      quantity: { type: Number, required: true },
+      price: { type: Number, required: true },
+      image: { type: String, required: true },
+      name: { type: String, required: true }
+    }],
     required: false
+  },
+  quantity: {
+    type: Number,
+    required: [true, 'Quantidade é obrigatória'],
+    min: [0, 'Quantidade não pode ser negativa']
   }
 }, {
   timestamps: true

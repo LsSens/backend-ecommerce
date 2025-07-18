@@ -1,4 +1,12 @@
-import { IsString, IsNumber, IsOptional, MinLength, MaxLength, Min, IsObject } from 'class-validator';
+import { IsString, IsNumber, IsOptional, MinLength, MaxLength, Min, IsObject, IsArray } from 'class-validator';
+
+// Interface para a estrutura de uma variável
+interface ProductVariable {
+  quantity: number;
+  price: number;
+  image: string;
+  name: string;
+}
 
 export class CreateProductDto {
   @IsString({ message: 'Nome do produto deve ser uma string' })
@@ -27,11 +35,13 @@ export class CreateProductDto {
   image?: string;
 
   @IsOptional()
-  @IsObject({ message: 'Variáveis deve ser um objeto' })
-  variables?: {
-    color?: string;
-    size?: string;
-  };
+  @IsArray({ message: 'Variáveis deve ser um array' })
+  variables?: ProductVariable[];
+
+  @IsOptional()
+  @IsNumber({}, { message: 'Quantidade deve ser um número' })
+  @Min(0, { message: 'Quantidade não pode ser negativa' })
+  quantity!: number;
 }
 
 export class UpdateProductDto {
@@ -61,9 +71,11 @@ export class UpdateProductDto {
   image?: string;
 
   @IsOptional()
-  @IsObject({ message: 'Variáveis deve ser um objeto' })
-  variables?: {
-    color?: string;
-    size?: string;
-  };
+  @IsArray({ message: 'Variáveis deve ser um array' })
+  variables?: ProductVariable[];
+
+  @IsOptional()
+  @IsNumber({}, { message: 'Quantidade deve ser um número' })
+  @Min(0, { message: 'Quantidade não pode ser negativa' })
+  quantity!: number;
 } 

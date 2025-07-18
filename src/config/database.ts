@@ -201,7 +201,25 @@ const createInitialData = async (): Promise<void> => {
         companyId: companyExists?._id.toString(),
         price: 100,
         description: 'Descrição do produto padrão',
-        categoryId: categoryExists?._id.toString()
+        quantity: 10,
+        categoryId: categoryExists?._id.toString(),
+        variables: [{
+            quantity: 5,
+            price: 100,
+            image: 'tamanho_m.jpg',
+            name: 'Tamanho M'
+          },{
+            quantity: 3,
+            price: 120,
+            image: 'cor_vermelha.jpg',
+            name: 'Cor Vermelha'
+          },{
+            quantity: 8,
+            price: 90,
+            image: 'material_algodao.jpg',
+            name: 'Material Algodão'
+          }
+        ]
       });
 
       await defaultProduct.save();
