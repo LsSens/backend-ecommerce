@@ -4,7 +4,7 @@ import { IsString, IsNumber, IsOptional, MinLength, MaxLength, Min, IsObject, Is
 interface ProductVariable {
   quantity: number;
   price: number;
-  image: string;
+  images: string[];
   name: string;
 }
 
@@ -28,11 +28,11 @@ export class CreateProductDto {
 
   @IsOptional()
   @IsString({ message: 'ID da categoria deve ser uma string' })
-  categoryId?: string;
+  category?: string;
 
   @IsOptional()
-  @IsString({ message: 'Imagem deve ser uma string' })
-  image?: string;
+  @IsArray({ message: 'Imagens deve ser um array' })
+  images?: string[];
 
   @IsOptional()
   @IsArray({ message: 'Variáveis deve ser um array' })
@@ -64,11 +64,11 @@ export class UpdateProductDto {
 
   @IsOptional()
   @IsString({ message: 'ID da categoria deve ser uma string' })
-  categoryId?: string;
+  category?: string;
 
   @IsOptional()
-  @IsString({ message: 'Imagem deve ser uma string' })
-  image?: string;
+  @IsArray({ message: 'Imagens deve ser um array' })
+  images?: string[];
 
   @IsOptional()
   @IsArray({ message: 'Variáveis deve ser um array' })

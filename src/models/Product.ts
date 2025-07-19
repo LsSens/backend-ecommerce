@@ -4,7 +4,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 interface ProductVariable {
   quantity: number;
   price: number;
-  image: string;
+  images: string[];
   name: string;
 }
 
@@ -13,8 +13,8 @@ export interface IProduct extends Document {
   companyId: mongoose.Types.ObjectId;
   description: string;
   price: number;
-  categoryId?: mongoose.Types.ObjectId;
-  image?: string;
+  category?: mongoose.Types.ObjectId;
+  images?: string[];
   variables?: ProductVariable[];
   quantity: number;
   createdAt: Date;
@@ -46,20 +46,21 @@ const productSchema = new Schema<IProduct>({
     required: [true, 'Preço é obrigatório'],
     min: [0, 'Preço não pode ser negativo']
   },
-  categoryId: {
+  category: {
     type: Schema.Types.ObjectId,
     ref: 'Category',
     required: false
   },
-  image: {
-    type: String,
-    required: false
+  images: {
+    type: [String],
+    required: false,
+    default: []
   },
   variables: {
     type: [{
       quantity: { type: Number, required: true },
       price: { type: Number, required: true },
-      image: { type: String, required: true },
+      images: { type: [String], required: true },
       name: { type: String, required: true }
     }],
     required: false

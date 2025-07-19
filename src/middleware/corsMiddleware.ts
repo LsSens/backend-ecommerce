@@ -13,7 +13,7 @@ export interface AuthenticatedRequest extends Request {
  */
 export const corsMiddleware = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const origin = req.headers.host;
+    const origin = req.headers.origin || `localhost:${process.env.PORT}`;
     
     if (!origin) {
       return next();
@@ -42,9 +42,6 @@ export const corsMiddleware = async (req: AuthenticatedRequest, res: Response, n
         message: 'Origin inválido'
       });
     }
-
-    // Log para debug
-    logger.info(`Procurando domínio: ${domain}`);
     
     const company = await Company.findOne({
       $or: [
@@ -70,10 +67,6 @@ export const corsMiddleware = async (req: AuthenticatedRequest, res: Response, n
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     res.header('Access-Control-Allow-Credentials', 'true');
-
-    if (req.method === 'OPTIONS') {
-      return res.status(200).end();
-    }
 
     return next();
   } catch (error) {

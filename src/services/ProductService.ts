@@ -40,7 +40,7 @@ export class ProductService {
     try {
       return await Product.findOne({ _id: id, companyId })
         .populate('companyId', 'name cnpj')
-        .populate('categoryId', 'name');
+        .populate('category', 'name');
     } catch (error) {
       throw error;
     }
@@ -50,7 +50,7 @@ export class ProductService {
     try {
       return await Product.find({ companyId })
         .populate('companyId', 'name cnpj')
-        .populate('categoryId', 'name');
+        .populate('category', 'name');
     } catch (error) {
       throw error;
     }
@@ -60,7 +60,7 @@ export class ProductService {
     try {
       return await Product.find({ companyId })
         .populate('companyId', 'name cnpj')
-        .populate('categoryId', 'name');
+        .populate('category', 'name');
     } catch (error) {
       throw error;
     }
@@ -68,9 +68,9 @@ export class ProductService {
 
   async getProductsByCategory(categoryId: string, companyId: string): Promise<IProduct[]> {
     try {
-      return await Product.find({ categoryId, companyId })
+      return await Product.find({ category: categoryId, companyId })
         .populate('companyId', 'name cnpj')
-        .populate('categoryId', 'name');
+        .populate('category', 'name');
     } catch (error) {
       throw error;
     }
@@ -86,7 +86,7 @@ export class ProductService {
         companyId
       })
         .populate('companyId', 'name cnpj')
-        .populate('categoryId', 'name');
+        .populate('category', 'name');
     } catch (error) {
       throw error;
     }

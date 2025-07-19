@@ -113,7 +113,7 @@ src/
 - `companyId` - ID da empresa
 - `description` - Descrição
 - `price` - Preço
-- `categoryId` - ID da categoria (opcional)
+- `category` - ID da categoria (opcional)
 
 ### Category (Categoria)
 - `id` - Identificador único

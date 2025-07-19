@@ -94,7 +94,7 @@ const createIndexes = async (): Promise<void> => {
       name: 'product_company_index'
     });
     
-    await createIndexIfNotExists(Product.collection, { categoryId: 1 }, { 
+    await createIndexIfNotExists(Product.collection, { category: 1 }, { 
       background: true,
       name: 'product_category_index'
     });
@@ -202,21 +202,25 @@ const createInitialData = async (): Promise<void> => {
         price: 100,
         description: 'Descrição do produto padrão',
         quantity: 10,
-        categoryId: categoryExists?._id.toString(),
+        category: categoryExists?._id.toString(),
+        images: ['https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1200&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=1200&h=400&fit=crop'],
         variables: [{
             quantity: 5,
             price: 100,
-            image: 'tamanho_m.jpg',
+            images: ['tamanho_m.jpg'],
             name: 'Tamanho M'
           },{
             quantity: 3,
             price: 120,
-            image: 'cor_vermelha.jpg',
+            images: ['cor_vermelha.jpg'],
             name: 'Cor Vermelha'
           },{
             quantity: 8,
             price: 90,
-            image: 'material_algodao.jpg',
+            images: ['material_algodao.jpg'],
             name: 'Material Algodão'
           }
         ]

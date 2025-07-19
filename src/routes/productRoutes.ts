@@ -45,7 +45,7 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
  *                 type: string
  *               price:
  *                 type: number
- *               categoryId:
+ *               category:
  *                 type: string
  *               variables:
  *                 type: array
@@ -84,6 +84,25 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
  *     responses:
  *       200:
  *         description: Lista de produtos encontrados
+ */
+
+/**
+ * @swagger
+ * /api/products/category/{categoryId}:
+ *   get:
+ *     summary: Busca produtos por categoria
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: categoryId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Lista de produtos da categoria
+ *       404:
+ *         description: Categoria não encontrada
  */
 
 /**
@@ -127,7 +146,7 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
  *                 type: string
  *               price:
  *                 type: number
- *               categoryId:
+ *               category:
  *                 type: string
  *               variables:
  *                 type: array
@@ -206,6 +225,7 @@ const productController = new ProductController();
 router.get('/', productController.getAllProducts.bind(productController));
 router.get('/search', productController.searchProducts.bind(productController));
 router.get('/variables', productController.getProductVariables.bind(productController));
+router.get('/category/:categoryId', productController.getProductsByCategory.bind(productController));
 router.get('/:id', productController.getProductById.bind(productController));
 
 router.post('/', authenticateToken, validateDto(CreateProductDto), productController.createProduct.bind(productController));

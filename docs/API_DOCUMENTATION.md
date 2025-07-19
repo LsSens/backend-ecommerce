@@ -46,8 +46,11 @@ interface Product {
   companyId: string;
   description: string;
   price: number;
-  categoryId?: string;
-  image?: string;
+  category?: {
+    _id: string,
+    name: string
+  };
+  images?: string[];
   variables?: ProductVariable[];
   quantity: number;
   createdAt: Date;
@@ -375,7 +378,7 @@ interface Company {
         "_id": "string",
         "name": "string"
       },
-      "image": "string",
+      "images": ["string"],
       "variables": [
         {
           "quantity": "number",
@@ -404,7 +407,7 @@ interface Company {
   "description": "string (10-1000 chars)",
   "price": "number (>= 0)",
   "categoryId": "string (opcional)",
-  "image": "string (opcional)",
+  "images": ["string"] (opcional),
   "variables": [
     {
       "quantity": "number",

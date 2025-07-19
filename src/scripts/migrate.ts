@@ -16,7 +16,6 @@ const runMigration = async (): Promise<void> => {
     logger.error('❌ Erro durante a migração:', error);
     process.exit(1);
   } finally {
-    // Desconectar do banco de dados
     await disconnectDatabase();
     process.exit(0);
   }

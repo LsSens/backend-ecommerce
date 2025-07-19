@@ -166,7 +166,7 @@ export class UserService {
       const products = await Product.find({ 
         _id: { $in: productIds }, 
         companyId 
-      }).select('name price description image');
+      }).select('name price description images');
 
       const cartWithProducts = {
         products: user.cart.products.map(cartItem => {
@@ -177,7 +177,7 @@ export class UserService {
               name: product.name,
               price: product.price,
               description: product.description,
-              image: product.image
+              images: product.images
             } : null),
             quantity: cartItem.quantity
           };
