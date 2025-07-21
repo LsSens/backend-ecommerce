@@ -21,6 +21,8 @@ async function migrateOrders() {
       return;
     }
 
+    console.log('Nenhum pedido encontrado. Criando dados de exemplo...');
+
     // Buscar usuário de exemplo (criar se não existir)
     let user = await User.findOne({ email: 'cliente@exemplo.com' });
     if (!user) {
@@ -34,20 +36,30 @@ async function migrateOrders() {
       });
       await user.save();
       console.log('Usuário de exemplo criado:', user._id);
+    } else {
+      console.log('Usuário de exemplo já existe:', user._id);
     }
 
-    // Buscar empresa de exemplo (criar se não existir)
+    // Buscar empresa de exemplo (usar a existente ou criar uma nova)
     let company = await Company.findOne({ name: 'Loja Exemplo' });
     if (!company) {
-      company = new Company({
-        name: 'Loja Exemplo',
-        email: 'contato@lojaexemplo.com',
-        phone: '(11) 88888-8888',
-        address: 'Rua Comercial, 456 - Centro',
-        cnpj: '12.345.678/0001-90'
-      });
-      await company.save();
-      console.log('Empresa de exemplo criada:', company._id);
+      // Se não existir a Loja Exemplo, usar a empresa padrão existente
+      company = await Company.findOne();
+      if (!company) {
+        company = new Company({
+          name: 'Loja Exemplo',
+          email: 'contato@lojaexemplo.com',
+          phone: '(11) 88888-8888',
+          address: 'Rua Comercial, 456 - Centro',
+          cnpj: '98.765.432/0001-10' // CNPJ diferente para evitar conflito
+        });
+        await company.save();
+        console.log('Empresa de exemplo criada:', company._id);
+      } else {
+        console.log('Usando empresa existente:', company._id);
+      }
+    } else {
+      console.log('Empresa de exemplo já existe:', company._id);
     }
 
     // Buscar produtos de exemplo (criar se não existir)
@@ -63,6 +75,8 @@ async function migrateOrders() {
       });
       await product1.save();
       console.log('Produto 1 criado:', product1._id);
+    } else {
+      console.log('Produto 1 já existe:', product1._id);
     }
 
     let product2 = await Product.findOne({ name: 'Fone de Ouvido Bluetooth' });
@@ -77,6 +91,8 @@ async function migrateOrders() {
       });
       await product2.save();
       console.log('Produto 2 criado:', product2._id);
+    } else {
+      console.log('Produto 2 já existe:', product2._id);
     }
 
     let product3 = await Product.findOne({ name: 'Capa para Smartphone' });
@@ -91,6 +107,8 @@ async function migrateOrders() {
       });
       await product3.save();
       console.log('Produto 3 criado:', product3._id);
+    } else {
+      console.log('Produto 3 já existe:', product3._id);
     }
 
     // Criar pedido de exemplo

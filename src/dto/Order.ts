@@ -1,7 +1,6 @@
-import { IsString, IsNumber, IsOptional, MinLength, MaxLength, Min, IsArray, IsEnum, IsObject, ValidateNested } from 'class-validator';
+import { IsString, IsNumber, IsOptional, MinLength, MaxLength, Min, IsArray, IsEnum, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-// DTO para item do pedido
 export class OrderItemDto {
   @IsString({ message: 'ID do produto deve ser uma string' })
   productId!: string;
@@ -28,7 +27,6 @@ export class OrderItemDto {
   productImage?: string;
 }
 
-// DTO para endereço de entrega
 export class DeliveryAddressDto {
   @IsString({ message: 'Rua deve ser uma string' })
   @MinLength(3, { message: 'Rua deve ter pelo menos 3 caracteres' })

@@ -1,13 +1,14 @@
+import 'reflect-metadata';
 import dotenv from 'dotenv';
 import { logger } from '../utils/logger';
 import { connectDatabase } from '../config/database';
 import { migrateOrders } from './migrateOrders';
 import mongoose from 'mongoose';
-import { User } from '@/models/User';
-import { Company } from '@/models/Company';
-import { Product } from '@/models/Product';
-import { Category } from '@/models/Category';
-import { Order } from '@/models/Order';
+import { User } from '../models/User';
+import { Company } from '../models/Company';
+import { Product } from '../models/Product';
+import { Category } from '../models/Category';
+import { Order } from '../models/Order';
 
 dotenv.config();
 
@@ -179,6 +180,8 @@ const createInitialData = async (): Promise<void> => {
       
       await adminExists.save();
       logger.info('✅ Usuário administrador padrão criado');
+    } else {
+      logger.info('✅ Usuário administrador já existe');
     }
     
     const companyExists = await Company.findOne();
@@ -193,10 +196,14 @@ const createInitialData = async (): Promise<void> => {
       
       await defaultCompany.save();
 
-      adminExists.companyId = defaultCompany._id.toString();
-      await adminExists.save();
+      if (adminExists) {
+        adminExists.companyId = defaultCompany._id.toString();
+        await adminExists.save();
+      }
 
       logger.info('✅ Empresa padrão criada');
+    } else {
+      logger.info('✅ Empresa padrão já existe');
     }
 
     const categoryExists = await Category.findOne();
@@ -210,6 +217,8 @@ const createInitialData = async (): Promise<void> => {
       await defaultCategory.save();
 
       logger.info('✅ Categoria padrão criada');
+    } else {
+      logger.info('✅ Categoria padrão já existe');
     }
 
     const productExists = await Product.findOne();
@@ -248,6 +257,8 @@ const createInitialData = async (): Promise<void> => {
       await defaultProduct.save();
 
       logger.info('✅ Produto padrão criado');
+    } else {
+      logger.info('✅ Produto padrão já existe');
     }
     
   } catch (error) {
