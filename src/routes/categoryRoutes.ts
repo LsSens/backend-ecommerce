@@ -13,7 +13,7 @@ import { CreateCategoryDto, UpdateCategoryDto } from '../dto/Category';
 
 /**
  * @swagger
- * /api/categories:
+ * /categories:
  *   get:
  *     summary: Lista todas as categorias
  *     tags: [Categories]
@@ -45,7 +45,7 @@ import { CreateCategoryDto, UpdateCategoryDto } from '../dto/Category';
 
 /**
  * @swagger
- * /api/categories/search:
+ * /categories/search:
  *   get:
  *     summary: Busca categorias por termo
  *     tags: [Categories]
@@ -62,7 +62,7 @@ import { CreateCategoryDto, UpdateCategoryDto } from '../dto/Category';
 
 /**
  * @swagger
- * /api/categories/{id}:
+ * /categories/{id}:
  *   get:
  *     summary: Busca categoria por ID
  *     tags: [Categories]

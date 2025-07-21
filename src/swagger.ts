@@ -9,8 +9,12 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3000',
+      url: 'http://localhost:3000/api',
       description: 'Servidor local',
+    },
+    {
+      url: 'https://api-ecommerce-dev.lucassens.com.br/api',
+      description: 'Servidor de desenvolvimento',
     },
   ],
   components: {

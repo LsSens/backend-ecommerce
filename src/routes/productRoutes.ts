@@ -13,7 +13,7 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
 
 /**
  * @swagger
- * /api/products:
+ * /products:
  *   get:
  *     summary: Lista todos os produtos
  *     tags: [Products]
@@ -71,7 +71,7 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
 
 /**
  * @swagger
- * /api/products/search:
+ * /products/search:
  *   get:
  *     summary: Busca produtos por termo
  *     tags: [Products]
@@ -107,7 +107,7 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
 
 /**
  * @swagger
- * /api/products/{id}:
+ * /products/{id}:
  *   get:
  *     summary: Busca produto por ID
  *     tags: [Products]
@@ -188,7 +188,7 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
 
 /**
  * @swagger
- * /api/products/variables:
+ * /products/variables:
  *   get:
  *     summary: Busca variáveis de todos os produtos
  *     tags: [Products]

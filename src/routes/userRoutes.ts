@@ -14,7 +14,7 @@ import { CreateUserDto, LoginDto, UpdateUserDto } from '../dto/User';
 
 /**
  * @swagger
- * /api/users/register:
+ * /users/register:
  *   post:
  *     summary: Cria um novo usuário
  *     tags: [Users]
@@ -51,7 +51,7 @@ import { CreateUserDto, LoginDto, UpdateUserDto } from '../dto/User';
 
 /**
  * @swagger
- * /api/users/login:
+ * /users/login:
  *   post:
  *     summary: Realiza login do usuário
  *     tags: [Users]
@@ -78,7 +78,7 @@ import { CreateUserDto, LoginDto, UpdateUserDto } from '../dto/User';
 
 /**
  * @swagger
- * /api/users:
+ * /users:
  *   get:
  *     summary: Lista todos os usuários
  *     tags: [Users]
@@ -93,7 +93,7 @@ import { CreateUserDto, LoginDto, UpdateUserDto } from '../dto/User';
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /users/{id}:
  *   get:
  *     summary: Busca usuário por ID
  *     tags: [Users]
@@ -166,7 +166,7 @@ import { CreateUserDto, LoginDto, UpdateUserDto } from '../dto/User';
 
 /**
  * @swagger
- * /api/users/{id}/cart:
+ * /users/{id}/cart:
  *   get:
  *     summary: Busca carrinho de compras do usuário
  *     tags: [Users]
