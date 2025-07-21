@@ -13,7 +13,12 @@ export interface AuthenticatedRequest extends Request {
  */
 export const corsMiddleware = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   try {
-    const origin = req.headers.origin || `localhost:${process.env.PORT}`;
+    // Capturar origem de diferentes headers
+    const origin = req.headers.origin || 
+                   req.headers.referer || 
+                   (req.headers.host ? `http://${req.headers.host}` : null) ||
+                   (req.headers['x-forwarded-host'] ? `https://${req.headers['x-forwarded-host']}` : null) ||
+                   `localhost:${process.env.PORT}`;
     
     if (!origin) {
       return next();
@@ -142,4 +147,4 @@ export const validateUniqueDomains = async (req: Request, res: Response, next: N
       message: 'Erro interno do servidor'
     });
   }
-}; 
+};
