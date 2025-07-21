@@ -17,7 +17,7 @@ provider:
 
 functions:
   api:
-    handler: dist/server.handler
+    handler: src/server.handler
     events:
       - http:
           path: /
