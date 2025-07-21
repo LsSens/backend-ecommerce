@@ -15,21 +15,21 @@ provider:
     RATE_LIMIT_WINDOW_MS: ${env:RATE_LIMIT_WINDOW_MS}
     RATE_LIMIT_MAX_REQUESTS: ${env:RATE_LIMIT_MAX_REQUESTS}
 
-package:
-  patterns:
-    - '!node_modules/**'
-    - '!src/**'
-    - '!tsconfig.json'
-    - '!nodemon.json'
-    - '!.git/**'
-    - '!.github/**'
-    - '!README.md'
-    - 'dist/**'
-    - 'package.json'
+plugins:
+  - serverless-typescript
+
+custom:
+  typescript:
+    tsConfig: tsconfig.json
+    include:
+      - src/**/*
+    exclude:
+      - node_modules/**
+      - dist/**
 
 functions:
   api:
-    handler: dist/server.handler
+    handler: src/server.handler
     events:
       - http:
           path: /

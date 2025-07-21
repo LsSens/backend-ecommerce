@@ -22,9 +22,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build TypeScript for Lambda
-        run: npm run build:lambda
-
       - name: Run migrations
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}

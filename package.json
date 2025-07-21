@@ -2,13 +2,11 @@
   "name": "ecommerce-backend",
   "version": "1.0.0",
   "description": "Backend para sistema de e-commerce white label",
-  "main": "dist/server.js",
+  "main": "src/server.ts",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node src/server.ts",
     "dev": "nodemon src/server.ts",
     "build": "tsc",
-    "build:lambda": "tsc && npm run copy-package",
-    "copy-package": "node -e \"require('fs').copyFileSync('package.json', 'dist/package.json')\"",
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "migrate": "ts-node src/scripts/migrate.ts"
@@ -21,6 +19,9 @@
   ],
   "author": "",
   "license": "MIT",
+  "moduleAliases": {
+    "@": "src"
+  },
   "dependencies": {
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
@@ -33,6 +34,7 @@
     "express-rate-limit": "^7.1.5",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
+    "module-alias": "^2.2.3",
     "mongoose": "^8.0.3",
     "serverless-http": "^3.2.0",
     "swagger-jsdoc": "^6.2.8",
@@ -49,6 +51,7 @@
     "@typescript-eslint/parser": "^6.13.0",
     "eslint": "^8.54.0",
     "nodemon": "^3.0.2",
+    "serverless-typescript": "^0.0.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.2"
   }
