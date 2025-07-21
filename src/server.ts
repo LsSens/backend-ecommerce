@@ -26,6 +26,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(helmet());
 
+startServer();
+
 app.use('/api', corsMiddleware);
 
 app.use(cors({
@@ -97,7 +99,7 @@ const findAvailablePort = async (startPort: number): Promise<number> => {
   return port;
 };
 
-const startServer = async () => {
+async function startServer() {
   try {
 
     await connectDatabase();
@@ -140,9 +142,5 @@ process.on('unhandledRejection', (reason, promise) => {
   logger.error('Promise rejeitada não tratada:', reason);
   process.exit(1);
 });
-
-if (process.env.IS_OFFLINE) {
-  startServer();
-}
 
 export const handler = serverless(app);

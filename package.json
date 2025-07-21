@@ -2,9 +2,9 @@
   "name": "ecommerce-backend",
   "version": "1.0.0",
   "description": "Backend para sistema de e-commerce white label",
-  "main": "dist/server.js",
+  "main": "src/server.ts",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node src/server.ts",
     "dev": "nodemon src/server.ts",
     "build": "tsc",
     "lint": "eslint src/**/*.ts",
@@ -20,7 +20,7 @@
   "author": "",
   "license": "MIT",
   "moduleAliases": {
-    "@": "dist"
+    "@": "src"
   },
   "dependencies": {
     "@types/swagger-jsdoc": "^6.0.4",
@@ -52,7 +52,8 @@
     "@typescript-eslint/parser": "^6.13.0",
     "eslint": "^8.54.0",
     "nodemon": "^3.0.2",
-    "serverless-typescript": "^0.0.5",
+    "serverless-offline": "^12.0.4",
+    "serverless-plugin-typescript": "^2.1.5",
     "ts-node": "^10.9.1",
     "typescript": "^5.3.2"
   }
