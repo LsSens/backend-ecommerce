@@ -4,6 +4,7 @@ import { Company } from '../models/Company';
 import { User } from '../models/User';
 import { Product } from '../models/Product';
 import { Category } from '../models/Category';
+import { Order } from '../models/Order';
 
 export const connectDatabase = async (): Promise<void> => {
   try {
@@ -40,7 +41,7 @@ const createCollections = async (): Promise<void> => {
   try {
     const db = mongoose.connection.db;
     
-    const collections = ['users', 'companies', 'products', 'categories'];
+    const collections = ['users', 'companies', 'products', 'categories', 'orders'];
     
     for (const collectionName of collections) {
       const collections = await db.listCollections({ name: collectionName }).toArray();
@@ -114,6 +115,33 @@ const createIndexes = async (): Promise<void> => {
       unique: true,
       background: true,
       name: 'category_name_company_unique'
+    });
+    
+    // Índices para Order
+    await createIndexIfNotExists(Order.collection, { userId: 1, companyId: 1 }, { 
+      background: true,
+      name: 'order_user_company_index'
+    });
+    
+    await createIndexIfNotExists(Order.collection, { status: 1, companyId: 1 }, { 
+      background: true,
+      name: 'order_status_company_index'
+    });
+    
+    await createIndexIfNotExists(Order.collection, { paymentStatus: 1, companyId: 1 }, { 
+      background: true,
+      name: 'order_payment_status_company_index'
+    });
+    
+    await createIndexIfNotExists(Order.collection, { createdAt: -1 }, { 
+      background: true,
+      name: 'order_created_at_index'
+    });
+    
+    await createIndexIfNotExists(Order.collection, { orderNumber: 1 }, { 
+      unique: true,
+      background: true,
+      name: 'order_number_unique'
     });
     
     logger.info('✅ Todos os índices criados com sucesso');
