@@ -22,7 +22,37 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Conectar ao banco de dados antes de configurar os middlewares
+let isConnected = false;
+
+const ensureDatabaseConnection = async () => {
+  if (!isConnected) {
+    try {
+      await connectDatabase();
+      isConnected = true;
+      logger.info('✅ Conexão com banco estabelecida');
+    } catch (error) {
+      logger.error('❌ Erro ao conectar com banco:', error);
+      throw error;
+    }
+  }
+};
+
 app.use(helmet());
+
+// Middleware para garantir conexão com banco antes do CORS
+app.use('/api', async (req, res, next) => {
+  try {
+    await ensureDatabaseConnection();
+    next();
+  } catch (error) {
+    logger.error('Erro ao conectar com banco:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Erro de conexão com banco de dados'
+    });
+  }
+});
 
 app.use('/api', corsMiddleware);
 
@@ -96,8 +126,7 @@ const findAvailablePort = async (startPort: number): Promise<number> => {
 
 const startServer = async () => {
   try {
-
-    await connectDatabase();
+    await ensureDatabaseConnection();
     
     const availablePort = await findAvailablePort(parseInt(PORT.toString()));
     
