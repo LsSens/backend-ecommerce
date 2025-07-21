@@ -30,7 +30,7 @@ jobs:
     #     run: npm run migrate
 
       - name: Install Serverless
-        run: npm install -g serverless
+        run: npm install -g serverless@3
 
       - name: Deploy to AWS Lambda
         env:
