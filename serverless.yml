@@ -15,6 +15,18 @@ provider:
     RATE_LIMIT_WINDOW_MS: ${env:RATE_LIMIT_WINDOW_MS}
     RATE_LIMIT_MAX_REQUESTS: ${env:RATE_LIMIT_MAX_REQUESTS}
 
+plugins:
+  - serverless-typescript
+
+custom:
+  typescript:
+    tsConfig: tsconfig.json
+    include:
+      - src/**/*
+    exclude:
+      - node_modules/**
+      - dist/**
+
 functions:
   api:
     handler: src/server.handler
