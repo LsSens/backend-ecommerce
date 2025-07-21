@@ -15,6 +15,7 @@ import productRoutes from './routes/productRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './swagger';
+import serverless from 'serverless-http';
 
 dotenv.config();
 
@@ -95,6 +96,7 @@ const findAvailablePort = async (startPort: number): Promise<number> => {
 
 const startServer = async () => {
   try {
+
     await connectDatabase();
     
     const availablePort = await findAvailablePort(parseInt(PORT.toString()));
@@ -136,4 +138,8 @@ process.on('unhandledRejection', (reason, promise) => {
   process.exit(1);
 });
 
-startServer(); 
+if (process.env.IS_OFFLINE) {
+  startServer();
+}
+
+export const handler = serverless(app);
