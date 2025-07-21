@@ -4,6 +4,16 @@ provider:
   name: aws
   runtime: nodejs18.x
   region: us-east-1
+  environment:
+    MONGODB_URI: ${env:MONGODB_URI}
+    PORT: ${env:PORT}
+    NODE_ENV: ${env:NODE_ENV}
+    IS_OFFLINE: ${env:IS_OFFLINE}
+    JWT_SECRET: ${env:JWT_SECRET}
+    JWT_EXPIRES_IN: ${env:JWT_EXPIRES_IN}
+    LOG_LEVEL: ${env:LOG_LEVEL}
+    RATE_LIMIT_WINDOW_MS: ${env:RATE_LIMIT_WINDOW_MS}
+    RATE_LIMIT_MAX_REQUESTS: ${env:RATE_LIMIT_MAX_REQUESTS}
 
 functions:
   api:
