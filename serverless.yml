@@ -15,18 +15,6 @@ provider:
     RATE_LIMIT_WINDOW_MS: ${env:RATE_LIMIT_WINDOW_MS}
     RATE_LIMIT_MAX_REQUESTS: ${env:RATE_LIMIT_MAX_REQUESTS}
 
-plugins:
-  - serverless-typescript
-
-custom:
-  typescript:
-    tsConfig: tsconfig.json
-    include:
-      - src/**/*
-    exclude:
-      - node_modules/**
-      - dist/**
-
 functions:
   api:
     handler: src/server.handler
@@ -37,3 +25,26 @@ functions:
       - http:
           path: /{proxy+}
           method: any
+
+package:
+  patterns:
+    - '!./**'
+    - 'src/**'
+    - 'node_modules/**'
+    - 'package.json'
+    - 'tsconfig.json'
+  excludeDevDependencies: true
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-typescript
+
+custom:
+  typescript:
+    individually: true
+    sourceMaps: false
+    packager: 'npm'
+    packagerOptions:
+      scripts:
+        - rm -rf dist
+        - tsc
