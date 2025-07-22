@@ -12,6 +12,21 @@ export class OrderController {
   async createOrder(req: Request, res: Response): Promise<void> {
     try {
       const orderData: CreateOrderDto = req.body;
+      const companyId = (req as any).companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+
+      // Adicionar companyId aos dados do pedido se não estiver presente
+      if (!orderData.companyId) {
+        orderData.companyId = companyId;
+      }
+
       const order = await this.orderService.createOrder(orderData);
 
       res.status(201).json({
@@ -30,10 +45,19 @@ export class OrderController {
 
   async getAllOrders(req: Request, res: Response): Promise<void> {
     try {
-      const { companyId, userId, status } = req.query;
+      const companyId = (req as any).companyId;
+      const { userId, status } = req.query;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
       
       const orders = await this.orderService.getAllOrders(
-        companyId as string,
+        companyId,
         userId as string,
         status as string
       );
@@ -56,12 +80,31 @@ export class OrderController {
   async getOrderById(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
+      const companyId = (req as any).companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
       const order = await this.orderService.getOrderById(id);
 
       if (!order) {
         res.status(404).json({
           success: false,
           message: 'Pedido não encontrado'
+        });
+        return;
+      }
+
+      // Verificar se o pedido pertence à empresa do usuário
+      if (order.companyId.toString() !== companyId) {
+        res.status(403).json({
+          success: false,
+          message: 'Acesso negado: pedido não pertence à sua empresa'
         });
         return;
       }
@@ -83,12 +126,31 @@ export class OrderController {
   async getOrderByNumber(req: Request, res: Response): Promise<void> {
     try {
       const { orderNumber } = req.params;
+      const companyId = (req as any).companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
       const order = await this.orderService.getOrderByNumber(orderNumber);
 
       if (!order) {
         res.status(404).json({
           success: false,
           message: 'Pedido não encontrado'
+        });
+        return;
+      }
+
+      // Verificar se o pedido pertence à empresa do usuário
+      if (order.companyId.toString() !== companyId) {
+        res.status(403).json({
+          success: false,
+          message: 'Acesso negado: pedido não pertence à sua empresa'
         });
         return;
       }
@@ -111,16 +173,35 @@ export class OrderController {
     try {
       const { id } = req.params;
       const updateData: UpdateOrderDto = req.body;
+      const companyId = (req as any).companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
 
-      const order = await this.orderService.updateOrder(id, updateData);
-
-      if (!order) {
+      // Verificar se o pedido existe e pertence à empresa
+      const existingOrder = await this.orderService.getOrderById(id);
+      if (!existingOrder) {
         res.status(404).json({
           success: false,
           message: 'Pedido não encontrado'
         });
         return;
       }
+
+      if (existingOrder.companyId.toString() !== companyId) {
+        res.status(403).json({
+          success: false,
+          message: 'Acesso negado: pedido não pertence à sua empresa'
+        });
+        return;
+      }
+
+      const order = await this.orderService.updateOrder(id, updateData);
 
       res.status(200).json({
         success: true,
@@ -139,15 +220,35 @@ export class OrderController {
   async deleteOrder(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
-      const deleted = await this.orderService.deleteOrder(id);
+      const companyId = (req as any).companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
 
-      if (!deleted) {
+      // Verificar se o pedido existe e pertence à empresa
+      const existingOrder = await this.orderService.getOrderById(id);
+      if (!existingOrder) {
         res.status(404).json({
           success: false,
           message: 'Pedido não encontrado'
         });
         return;
       }
+
+      if (existingOrder.companyId.toString() !== companyId) {
+        res.status(403).json({
+          success: false,
+          message: 'Acesso negado: pedido não pertence à sua empresa'
+        });
+        return;
+      }
+
+      const deleted = await this.orderService.deleteOrder(id);
 
       res.status(200).json({
         success: true,
@@ -165,9 +266,17 @@ export class OrderController {
   async getOrdersByStatus(req: Request, res: Response): Promise<void> {
     try {
       const { status } = req.params;
-      const { companyId } = req.query;
+      const companyId = (req as any).companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
 
-      const orders = await this.orderService.getOrdersByStatus(status, companyId as string);
+      const orders = await this.orderService.getOrdersByStatus(status, companyId);
 
       res.status(200).json({
         success: true,
@@ -187,9 +296,17 @@ export class OrderController {
   async getOrdersByUser(req: Request, res: Response): Promise<void> {
     try {
       const { userId } = req.params;
-      const { companyId } = req.query;
+      const companyId = (req as any).companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
 
-      const orders = await this.orderService.getOrdersByUser(userId, companyId as string);
+      const orders = await this.orderService.getOrdersByUser(userId, companyId);
 
       res.status(200).json({
         success: true,
@@ -208,8 +325,17 @@ export class OrderController {
 
   async getOrderStatistics(req: Request, res: Response): Promise<void> {
     try {
-      const { companyId } = req.query;
-      const stats = await this.orderService.getOrderStatistics(companyId as string);
+      const companyId = (req as any).companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const stats = await this.orderService.getOrderStatistics(companyId);
 
       res.status(200).json({
         success: true,
@@ -229,6 +355,15 @@ export class OrderController {
     try {
       const { id } = req.params;
       const { status } = req.body;
+      const companyId = (req as any).companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
 
       if (!status) {
         res.status(400).json({
@@ -238,15 +373,25 @@ export class OrderController {
         return;
       }
 
-      const order = await this.orderService.updateOrderStatus(id, status);
-
-      if (!order) {
+      // Verificar se o pedido existe e pertence à empresa
+      const existingOrder = await this.orderService.getOrderById(id);
+      if (!existingOrder) {
         res.status(404).json({
           success: false,
           message: 'Pedido não encontrado'
         });
         return;
       }
+
+      if (existingOrder.companyId.toString() !== companyId) {
+        res.status(403).json({
+          success: false,
+          message: 'Acesso negado: pedido não pertence à sua empresa'
+        });
+        return;
+      }
+
+      const order = await this.orderService.updateOrderStatus(id, status);
 
       res.status(200).json({
         success: true,
