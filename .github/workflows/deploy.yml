@@ -29,7 +29,7 @@ jobs:
         env:
           SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
         run: |
-          echo $SERVERLESS_ACCESS_KEY | serverless login --key
+          echo "$SERVERLESS_ACCESS_KEY" | serverless login --key
 
       - name: Run migrations
         env:
@@ -38,6 +38,7 @@ jobs:
 
       - name: Deploy to AWS Lambda
         env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
