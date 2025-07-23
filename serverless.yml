@@ -39,14 +39,6 @@ plugins:
   - serverless-offline
 
 custom:
-  typescript:
-    individually: true
-    sourceMaps: false
-    packager: 'npm'
-    packagerOptions:
-      scripts:
-        - rm -rf dist
-        - tsc
   serverless-offline:
     httpPort: 3000
     noPrependStageInUrl: true
