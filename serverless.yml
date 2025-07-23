@@ -25,6 +25,12 @@ functions:
       - http:
           path: /{proxy+}
           method: any
+      - http:
+          path: /api/docs
+          method: get
+      - http:
+          path: /api/docs/json
+          method: get
 
 package:
   patterns:

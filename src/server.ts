@@ -16,8 +16,7 @@ import productRoutes from './routes/productRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import orderRoutes from './routes/orderRoutes';
 import domainRoutes from './routes/domainRoutes';
-import swaggerUi from 'swagger-ui-express';
-import { swaggerSpec } from './swagger';
+import { swaggerSpec, swaggerHtml } from './swagger';
 import serverless from 'serverless-http';
 
 dotenv.config();
@@ -25,7 +24,19 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://unpkg.com"],
+      scriptSrcElem: ["'self'", "'unsafe-inline'", "https://unpkg.com"],
+      fontSrc: ["'self'", "https://unpkg.com"],
+      imgSrc: ["'self'", "data:", "https:"],
+      connectSrc: ["'self'"],
+    },
+  },
+}));
 
 startServer();
 
@@ -62,7 +73,17 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/domains', domainRoutes);
 
-app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// Endpoint para retornar o JSON do Swagger
+app.get('/api/docs/json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.json(swaggerSpec);
+});
+
+// Endpoint para servir o HTML do Swagger UI
+app.get('/api/docs', (req, res) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.send(swaggerHtml);
+});
 
 app.get('/health', (req, res) => {
   res.status(200).json({
