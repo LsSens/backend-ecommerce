@@ -2,7 +2,7 @@ service: backend-ecommerce-api
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs22.x
   region: us-east-1
   environment:
     MONGODB_URI: ${env:MONGODB_URI}
@@ -37,7 +37,6 @@ package:
 
 plugins:
   - serverless-offline
-  - serverless-plugin-typescript
 
 custom:
   typescript:
@@ -48,3 +47,6 @@ custom:
       scripts:
         - rm -rf dist
         - tsc
+  serverless-offline:
+    httpPort: 3000
+    noPrependStageInUrl: true
