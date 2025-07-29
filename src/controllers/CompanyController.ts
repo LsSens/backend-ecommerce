@@ -29,7 +29,6 @@ export class CompanyController {
 
   async updateCompany(req: Request, res: Response): Promise<void> {
     try {
-      const { id } = req.params;
       const companyData: UpdateCompanyDto = req.body;
       const companyId = (req as any).companyId;
       
@@ -40,8 +39,8 @@ export class CompanyController {
         });
         return;
       }
-      
-      const company = await this.companyService.updateCompany(id, companyData, companyId);
+
+      const company = await this.companyService.updateCompany(companyId, companyData);
       
       if (!company) {
         res.status(404).json({
@@ -60,6 +59,40 @@ export class CompanyController {
       res.status(400).json({
         success: false,
         message: error instanceof Error ? error.message : 'Erro ao atualizar empresa'
+      });
+    }
+  }
+
+  async getCurrentCompany(req: Request, res: Response): Promise<void> {
+    try {
+      const companyId = (req as any).companyId;
+      
+      if (!companyId) {
+        res.status(400).json({
+          success: false,
+          message: 'Usuário não está associado a uma empresa'
+        });
+        return;
+      }
+      
+      const company = await this.companyService.getCompanyById(companyId);
+      
+      if (!company) {
+        res.status(404).json({
+          success: false,
+          message: 'Empresa não encontrada'
+        });
+        return;
+      }
+
+      res.status(200).json({
+        success: true,
+        data: company
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: error instanceof Error ? error.message : 'Erro ao buscar empresa'
       });
     }
   }
@@ -91,7 +124,6 @@ export class CompanyController {
 
   async getCompanyById(req: Request, res: Response): Promise<void> {
     try {
-      const { id } = req.params;
       const companyId = (req as any).companyId;
       
       if (!companyId) {
@@ -102,7 +134,7 @@ export class CompanyController {
         return;
       }
       
-      const company = await this.companyService.getCompanyById(id, companyId);
+      const company = await this.companyService.getCompanyById(companyId);
       
       if (!company) {
         res.status(404).json({

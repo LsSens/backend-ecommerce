@@ -155,122 +155,26 @@ export class ProductController {
         });
         return;
       }
+
+      // Extrair parâmetros de filtro da query
+      const { q, categoryId, variables } = req.query;
       
-      const products = await this.productService.getAllProducts(companyId);
+      const filters = {
+        searchTerm: q as string,
+        categoryId: categoryId as string,
+        includeVariables: variables === 'true'
+      };
+
+      const result = await this.productService.getProducts(companyId, filters);
 
       res.status(200).json({
         success: true,
-        data: products
+        data: result
       });
     } catch (error) {
       res.status(400).json({
         success: false,
         message: error instanceof Error ? error.message : 'Erro ao buscar produtos'
-      });
-    }
-  }
-
-  async getProductsByCategory(req: Request, res: Response): Promise<void> {
-    try {
-      const { categoryId } = req.params;
-      const companyId = (req as any).companyId;
-      
-      if (!companyId) {
-        res.status(400).json({
-          success: false,
-          message: 'Usuário não está associado a uma empresa'
-        });
-        return;
-      }
-      
-      const products = await this.productService.getProductsByCategory(categoryId, companyId);
-
-      res.status(200).json({
-        success: true,
-        data: products
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error instanceof Error ? error.message : 'Erro ao buscar produtos da categoria'
-      });
-    }
-  }
-
-  async getProductsByCompany(req: Request, res: Response): Promise<void> {
-    try {
-      const { companyId } = req.params;
-      const products = await this.productService.getProductsByCompany(companyId);
-
-      res.status(200).json({
-        success: true,
-        data: products
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error instanceof Error ? error.message : 'Erro ao buscar produtos da empresa'
-      });
-    }
-  }
-
-  async searchProducts(req: Request, res: Response): Promise<void> {
-    try {
-      const { q } = req.query;
-      const companyId = (req as any).companyId;
-      
-      if (!companyId) {
-        res.status(400).json({
-          success: false,
-          message: 'Usuário não está associado a uma empresa'
-        });
-        return;
-      }
-      
-      if (!q || typeof q !== 'string') {
-        res.status(400).json({
-          success: false,
-          message: 'Parâmetro de busca é obrigatório'
-        });
-        return;
-      }
-
-      const products = await this.productService.searchProducts(q, companyId);
-
-      res.status(200).json({
-        success: true,
-        data: products
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error instanceof Error ? error.message : 'Erro ao buscar produtos'
-      });
-    }
-  }
-
-  async getProductVariables(req: Request, res: Response): Promise<void> {
-    try {
-      const companyId = (req as any).companyId;
-      
-      if (!companyId) {
-        res.status(400).json({
-          success: false,
-          message: 'Usuário não está associado a uma empresa'
-        });
-        return;
-      }
-      
-      const variables = await this.productService.getProductVariables(companyId);
-
-      res.status(200).json({
-        success: true,
-        data: variables
-      });
-    } catch (error) {
-      res.status(400).json({
-        success: false,
-        message: error instanceof Error ? error.message : 'Erro ao buscar variáveis do produto'
       });
     }
   }

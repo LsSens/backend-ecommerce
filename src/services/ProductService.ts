@@ -1,6 +1,12 @@
 import { Product, IProduct } from '../models/Product';
 import { CreateProductDto, UpdateProductDto } from '../dto/Product';
 
+interface ProductFilters {
+  searchTerm?: string;
+  categoryId?: string;
+  includeVariables?: boolean;
+}
+
 export class ProductService {
   async createProduct(productData: CreateProductDto, companyId: string): Promise<IProduct> {
     try {
@@ -46,9 +52,32 @@ export class ProductService {
     }
   }
 
-  async getAllProducts(companyId: string): Promise<IProduct[]> {
+  async getProducts(companyId: string, filters: ProductFilters = {}): Promise<IProduct[] | any[]> {
     try {
-      return await Product.find({ companyId })
+      const { searchTerm, categoryId, includeVariables } = filters;
+
+      // Se includeVariables for true, retorna apenas as variáveis
+      if (includeVariables) {
+        return await this.getProductVariables(companyId);
+      }
+
+      // Construir query de busca
+      const query: any = { companyId };
+
+      // Filtro por categoria
+      if (categoryId) {
+        query.category = categoryId;
+      }
+
+      // Filtro por termo de busca
+      if (searchTerm) {
+        query.$or = [
+          { name: { $regex: searchTerm, $options: 'i' } },
+          { description: { $regex: searchTerm, $options: 'i' } }
+        ];
+      }
+
+      return await Product.find(query)
         .populate('companyId', 'name cnpj')
         .populate('category', 'name');
     } catch (error) {
@@ -56,43 +85,7 @@ export class ProductService {
     }
   }
 
-  async getProductsByCompany(companyId: string): Promise<IProduct[]> {
-    try {
-      return await Product.find({ companyId })
-        .populate('companyId', 'name cnpj')
-        .populate('category', 'name');
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getProductsByCategory(categoryId: string, companyId: string): Promise<IProduct[]> {
-    try {
-      return await Product.find({ category: categoryId, companyId })
-        .populate('companyId', 'name cnpj')
-        .populate('category', 'name');
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async searchProducts(query: string, companyId: string): Promise<IProduct[]> {
-    try {
-      return await Product.find({
-        $or: [
-          { name: { $regex: query, $options: 'i' } },
-          { description: { $regex: query, $options: 'i' } }
-        ],
-        companyId
-      })
-        .populate('companyId', 'name cnpj')
-        .populate('category', 'name');
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getProductVariables(companyId: string): Promise<any[]> {
+  private async getProductVariables(companyId: string): Promise<any[]> {
     try {
       const products = await Product.find({ companyId });
       

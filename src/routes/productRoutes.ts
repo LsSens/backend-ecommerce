@@ -15,11 +15,38 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
  * @swagger
  * /products:
  *   get:
- *     summary: Lista todos os produtos
+ *     summary: Lista produtos com filtros opcionais
  *     tags: [Products]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         description: Termo de busca para nome ou descrição do produto
+ *       - in: query
+ *         name: categoryId
+ *         schema:
+ *           type: string
+ *         description: ID da categoria para filtrar produtos
+ *       - in: query
+ *         name: variables
+ *         schema:
+ *           type: boolean
+ *         description: Se true, retorna apenas as variáveis dos produtos
  *     responses:
  *       200:
- *         description: Lista de produtos
+ *         description: Lista de produtos ou variáveis
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
  *   post:
  *     summary: Cria um novo produto
  *     tags: [Products]
@@ -67,42 +94,6 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
  *         description: Produto criado com sucesso
  *       400:
  *         description: Erro de validação
- */
-
-/**
- * @swagger
- * /products/search:
- *   get:
- *     summary: Busca produtos por termo
- *     tags: [Products]
- *     parameters:
- *       - in: query
- *         name: q
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Lista de produtos encontrados
- */
-
-/**
- * @swagger
- * /api/products/category/{categoryId}:
- *   get:
- *     summary: Busca produtos por categoria
- *     tags: [Products]
- *     parameters:
- *       - in: path
- *         name: categoryId
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Lista de produtos da categoria
- *       404:
- *         description: Categoria não encontrada
  */
 
 /**
@@ -186,46 +177,11 @@ import { CreateProductDto, UpdateProductDto } from '../dto/Product';
  *         description: Produto não encontrado
  */
 
-/**
- * @swagger
- * /products/variables:
- *   get:
- *     summary: Busca variáveis de todos os produtos
- *     tags: [Products]
- *     security:
- *       - bearerAuth: []
- *     responses:   
- *       200:
- *         description: Lista de variáveis de todos os produtos
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                 data:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       quantity:
- *                         type: number
- *                       price:
- *                         type: number
- *                       image:
- *                         type: string
- *                       name:
- *                         type: string
- */
-
 const router = Router();
 const productController = new ProductController();
 
+// Endpoint principal consolidado que aceita parâmetros de filtro
 router.get('/', productController.getAllProducts.bind(productController));
-router.get('/search', productController.searchProducts.bind(productController));
-router.get('/variables', productController.getProductVariables.bind(productController));
-router.get('/category/:categoryId', productController.getProductsByCategory.bind(productController));
 router.get('/:id', productController.getProductById.bind(productController));
 
 router.post('/', authenticateToken, validateDto(CreateProductDto), productController.createProduct.bind(productController));

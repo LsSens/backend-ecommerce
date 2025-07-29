@@ -16,6 +16,7 @@ import productRoutes from './routes/productRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import orderRoutes from './routes/orderRoutes';
 import domainRoutes from './routes/domainRoutes';
+import companyRoutes from './routes/companyRoutes';
 import { swaggerSpec, swaggerHtml } from './swagger';
 import serverless from 'serverless-http';
 
@@ -72,6 +73,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/domains', domainRoutes);
+app.use('/api/companies', companyRoutes);
 
 // Endpoint para retornar o JSON do Swagger
 app.get('/api/docs/json', (req, res) => {
