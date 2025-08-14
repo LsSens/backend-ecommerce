@@ -134,7 +134,7 @@ import { UpdateCompanyDto } from '../dto/Company';
 const router = Router();
 const companyController = new CompanyController();
 
-router.get('/current', authenticateToken, companyController.getCurrentCompany.bind(companyController));
+router.get('/current', companyController.getCurrentCompany.bind(companyController));
 router.put('/current', 
   authenticateToken, 
   requirePermissions.Admin, 
