@@ -25,6 +25,12 @@ provider:
             - s3:PutObject
             - s3:DeleteObject
           Resource: "arn:aws:s3:::${env:S3_BUCKET_NAME, 'shophub-ecommerce-assets'}/*"
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource: "*"
 
 functions:
   api:
