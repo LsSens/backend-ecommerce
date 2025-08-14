@@ -44,9 +44,16 @@ export class ProductService {
 
   async getProductById(id: string, companyId: string): Promise<IProduct | null> {
     try {
-      return await Product.findOne({ _id: id, companyId })
+      const product = await Product.findOne({ _id: id, companyId })
         .populate('companyId', 'name cnpj')
         .populate('category', 'name');
+      
+      // Adiciona categoryId para formulários de edição
+      if (product && product.category) {
+        (product as any).categoryId = product.category._id;
+      }
+      
+      return product;
     } catch (error) {
       throw error;
     }
@@ -77,9 +84,18 @@ export class ProductService {
         ];
       }
 
-      return await Product.find(query)
+      const products = await Product.find(query)
         .populate('companyId', 'name cnpj')
         .populate('category', 'name');
+      
+      // Adiciona categoryId para cada produto
+      products.forEach(product => {
+        if (product.category) {
+          (product as any).categoryId = product.category._id;
+        }
+      });
+      
+      return products;
     } catch (error) {
       throw error;
     }
