@@ -47,12 +47,12 @@ const customizationsSchema = new Schema<ICompanyCustomizations>({
     type: String,
     default: null,
     validate: {
-      validator: function(url: string) {
-        if (!url) return true;
-        const urlRegex = /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp)$/i;
-        return urlRegex.test(url);
+      validator: function(base64: string) {
+        if (!base64) return true;
+        const base64Regex = /^data:image\/(jpeg|jpg|png|gif|webp);base64,/;
+        return base64Regex.test(base64);
       },
-      message: 'Logo deve ser uma URL válida de imagem (jpg, jpeg, png, gif, webp)'
+      message: 'Logo deve ser uma string base64 válida de imagem (jpeg, jpg, png, gif, webp)'
     }
   }
 }, { _id: false });

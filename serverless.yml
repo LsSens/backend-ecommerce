@@ -15,24 +15,6 @@ provider:
     RATE_LIMIT_WINDOW_MS: ${env:RATE_LIMIT_WINDOW_MS}
     RATE_LIMIT_MAX_REQUESTS: ${env:RATE_LIMIT_MAX_REQUESTS}
     S3_BUCKET_NAME: ${env:S3_BUCKET_NAME}
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - s3:GetObject
-            - s3:PutObject
-            - s3:DeleteObject
-            - s3:PutObjectAcl
-          Resource: 
-            - "arn:aws:s3:::${env:S3_BUCKET_NAME, 'shophub-ecommerce-assets'}"
-            - "arn:aws:s3:::${env:S3_BUCKET_NAME, 'shophub-ecommerce-assets'}/*"
-        - Effect: Allow
-          Action:
-            - logs:CreateLogGroup
-            - logs:CreateLogStream
-            - logs:PutLogEvents
-          Resource: "*"
 
 functions:
   api:

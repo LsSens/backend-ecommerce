@@ -6,6 +6,7 @@ export class CompanyCustomizationsDto {
   @IsArray({ message: 'Banners da home devem ser um array' })
   @IsString({ each: true, message: 'Cada banner deve ser uma string base64' })
   @ArrayMaxSize(10, { message: 'Máximo de 10 banners permitidos' })
+  @Matches(/^data:image\/(jpeg|jpg|png|gif|webp);base64,/, { each: true, message: 'Cada banner deve ser uma string base64 válida de imagem' })
   homeBanners?: string[];
 
   @IsOptional()
@@ -17,6 +18,7 @@ export class CompanyCustomizationsDto {
 
   @IsOptional()
   @IsString({ message: 'Logo deve ser uma string base64' })
+  @Matches(/^data:image\/(jpeg|jpg|png|gif|webp);base64,/, { message: 'Logo deve ser uma string base64 válida de imagem' })
   logo?: string;
 }
 
