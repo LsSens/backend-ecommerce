@@ -1,3 +1,6 @@
+
+<img width="1862" height="923" alt="image" src="https://github.com/user-attachments/assets/e08845a3-8846-44c1-9eca-9df390db1098" />
+
 # 🛒 Backend E-commerce White Label
 
 Backend completo para sistema de e-commerce white label desenvolvido com Node.js, TypeScript, Express e MongoDB.
